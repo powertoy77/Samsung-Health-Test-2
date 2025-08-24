@@ -2,6 +2,11 @@
     <!-- Samsung Health 확인을 위한 권한 -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     
+    <!-- Samsung Health 데이터 접근 권한 -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.BODY_SENSORS_BACKGROUND" />
+    
     <application
         android:label="samsung_health_clone"
         android:name="${applicationName}"
@@ -33,6 +38,51 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+            
+        <!-- Samsung Health Data Permissions Metadata -->
+        <meta-data
+            android:name="com.samsung.android.health.permission.read.STEP_COUNT"
+            android:value="true" />
+        <meta-data
+            android:name="com.samsung.android.health.permission.read.SLEEP"
+            android:value="true" />
+        <meta-data
+            android:name="com.samsung.android.health.permission.write.WEIGHT"
+            android:value="true" />
+            
+        <!-- 
+        Samsung Health 데이터 권한 추가 방법:
+        
+        읽기 권한 (READ):
+        - com.samsung.android.health.permission.read.STEP_COUNT (걸음수)
+        - com.samsung.android.health.permission.read.SLEEP (수면)
+        - com.samsung.android.health.permission.read.HEART_RATE (심박수)
+        - com.samsung.android.health.permission.read.BLOOD_PRESSURE (혈압)
+        - com.samsung.android.health.permission.read.BLOOD_GLUCOSE (혈당)
+        - com.samsung.android.health.permission.read.BODY_COMPOSITION (체성분)
+        - com.samsung.android.health.permission.read.EXERCISE (운동)
+        - com.samsung.android.health.permission.read.CALORIES (칼로리)
+        - com.samsung.android.health.permission.read.DISTANCE (거리)
+        - com.samsung.android.health.permission.read.FLOORS_CLIMBED (층수)
+        - com.samsung.android.health.permission.read.WATER_INTAKE (수분 섭취)
+        - com.samsung.android.health.permission.read.CAFEINE_INTAKE (카페인 섭취)
+        
+        쓰기 권한 (WRITE):
+        - com.samsung.android.health.permission.write.WEIGHT (체중)
+        - com.samsung.android.health.permission.write.BLOOD_PRESSURE (혈압)
+        - com.samsung.android.health.permission.write.BLOOD_GLUCOSE (혈당)
+        - com.samsung.android.health.permission.write.BODY_COMPOSITION (체성분)
+        - com.samsung.android.health.permission.write.EXERCISE (운동)
+        - com.samsung.android.health.permission.write.WATER_INTAKE (수분 섭취)
+        - com.samsung.android.health.permission.write.CAFEINE_INTAKE (카페인 섭취)
+        - com.samsung.android.health.permission.write.MEAL (식사)
+        - com.samsung.android.health.permission.write.MEDICATION (약물)
+        
+        사용법:
+        1. 필요한 권한의 meta-data를 추가
+        2. android:value="true"로 설정
+        3. 런타임에서 권한 요청 처리 필요
+        -->
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
