@@ -64,7 +64,7 @@ class BingoService {
   // 새로운 빙고판 생성
   void generateNewBingoBoard() {
     final random = Random();
-    final numbers = List<int>.generate(100, (index) => index + 1);
+    final numbers = List<int>.generate(50, (index) => index + 1);
     numbers.shuffle(random);
     _bingoNumbers = numbers.take(25).toList();
     _bingoSelected = List<bool>.filled(25, false);
@@ -180,6 +180,13 @@ class BingoService {
         isNumberFound: false,
         isBingoCompleted: false,
       );
+    }
+  }
+  
+  // 빙고판이 존재하는지 확인하고 없으면 생성
+  Future<void> ensureBingoBoardExists() async {
+    if (_bingoNumbers.isEmpty) {
+      generateNewBingoBoard();
     }
   }
   

@@ -135,7 +135,10 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
   }
   
   // 빙고 확인 및 네비게이션
-  void _checkBingoAndNavigate(int quoteNumber) {
+  void _checkBingoAndNavigate(int quoteNumber) async {
+    // 빙고판이 없으면 자동으로 생성
+    await _bingoService.ensureBingoBoardExists();
+    
     final result = _bingoService.checkBingoAndNavigate(quoteNumber);
     
     if (result.isBingoCompleted) {
@@ -263,7 +266,10 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
   }
   
   // 빙고판 페이지로 이동 (홈 화면으로 돌아가기)
-  void _navigateToBingoPage() {
+  void _navigateToBingoPage() async {
+    // 빙고판이 없으면 자동으로 생성
+    await _bingoService.ensureBingoBoardExists();
+    
     final bingoData = _bingoService.getBingoData();
     Navigator.pushAndRemoveUntil(
       context,
