@@ -6,6 +6,7 @@ import 'dart:async';
 import '../widgets/bingo_page.dart';
 import '../widgets/fireworks_animation.dart';
 import '../services/bingo_service.dart';
+import 'detail_pages/daily_activity_detail_page.dart';
 import 'detail_pages/sleep_detail_page.dart';
 import 'detail_pages/workout_start_page.dart';
 import 'detail_pages/energy_score_detail_page.dart';
@@ -42,6 +43,22 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   // 랜덤 명언을 가져오는 메서드 (선택되지 않은 명언만)
   Map<String, String> _getRandomQuote() {
     return _bingoService.getRandomQuote();
+  }
+  
+  // 일일 활동 상세 페이지로 이동 후 명언 팝업 표시
+  void _navigateToDailyActivityAndShowQuote() async {
+    // 일일 활동 상세 페이지로 이동
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const DailyActivityDetailPage(),
+      ),
+    );
+    
+    // 페이지에서 돌아온 후 명언 팝업 표시
+    if (mounted) {
+      _showMotivationalQuoteDialog();
+    }
   }
   
   // 명언 팝업을 표시하는 메서드
@@ -487,8 +504,8 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   Widget _buildActivitySummaryCard() {
     return GestureDetector(
       onTap: () {
-        // 명언 팝업 표시
-        _showMotivationalQuoteDialog();
+        // 일일 활동 상세 페이지로 이동 후 명언 팝업 표시
+        _navigateToDailyActivityAndShowQuote();
       },
       child: Container(
         padding: const EdgeInsets.all(16),
