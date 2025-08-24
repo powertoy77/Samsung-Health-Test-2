@@ -4,7 +4,9 @@
 
 ## 📱 프로젝트 개요
 
-이 프로젝트는 삼성 헬스 앱의 메인 화면을 Flutter로 구현한 것입니다. 실제 삼성 헬스 앱과 동일한 디자인과 레이아웃을 제공하며, **Daily Activity Detail Page**, **Sleep Detail Page**, **Workout Start Page**, **Energy Score Detail Page**, **Sleep Coaching Start Page**, **All Workouts Page**, **Steps Detail Page** 기능이 포함되어 있습니다.
+이 프로젝트는 삼성 헬스 앱의 메인 화면을 Flutter로 구현한 것입니다. 실제 삼성 헬스 앱과 동일한 디자인과 레이아웃을 제공하며, **Daily Activity Detail Page**, **Sleep Detail Page**, **Workout Start Page**, **Energy Score Detail Page**, **Sleep Coaching Start Page**, **All Workouts Page**, **Steps Detail Page** 기능이 포함되어 있습니다. 
+
+**최신 업데이트**: Samsung Health Data SDK 통합 및 실제 건강 데이터 읽기 기능이 추가되었습니다. 걸음수 데이터 읽기, 권한 관리, 앱 설치/버전 확인 등 실제 Samsung Health 앱과의 연동 기능을 제공합니다.
 
 ## 🚀 바로 시작하기
 
@@ -22,7 +24,10 @@
 ## ✨ 주요 기능
 
 ### 🏠 메인 화면 구성
-- **헤더 섹션**: Samsung Health 로고 및 연결 상태 표시
+- **헤더 섹션**: Samsung Health 로고, 연결 상태, 권한 요청 버튼, 데이터 읽기 버튼들
+  - **권한 요청 버튼**: Samsung Health 데이터 접근 권한 요청
+  - **7일 걸음수 버튼**: 최근 7일간 걸음수 데이터 읽기
+  - **14일 합계 버튼**: 최근 14일간 일별 걸음수 합계 읽기
 - **활동 요약 카드**: 걸음 수, 활동 시간, 소모 칼로리 표시 ⭐ **탭 가능**
 - **수면 점수 카드**: 수면 점수 및 수면 시간 정보 ⭐ **탭 가능**
 - **활동 바로가기 카드**: 걷기, 수영, 달리기, 더보기 버튼 ⭐ **탭 가능**
@@ -231,6 +236,17 @@ samsung_health_clone/
 ├── lib/
 │   └── main.dart              # 메인 앱 파일 (Daily Activity, Sleep, Workout, Energy Score Detail Pages 포함)
 ├── android/                   # Android 플랫폼 설정
+│   ├── app/
+│   │   ├── src/main/
+│   │   │   ├── kotlin/com/example/samsung_health_clone/
+│   │   │   │   ├── MainActivity.kt              # 메인 Activity (MethodChannel, SDK 연동)
+│   │   │   │   ├── HealthStoreManager.kt        # Samsung Health SDK 연결 관리
+│   │   │   │   └── HealthPermissionHelper.kt    # 권한 관리 헬퍼
+│   │   │   ├── AndroidManifest.xml              # 권한 및 메타데이터 설정
+│   │   │   └── libs/
+│   │   │       └── samsung-health-data-api-1.0.0.aar  # Samsung Health Data SDK
+│   │   └── build.gradle.kts                     # Gradle 설정 (AAR, 의존성)
+│   └── build.gradle
 ├── ios/                      # iOS 플랫폼 설정
 ├── web/                      # Web 플랫폼 설정
 ├── pubspec.yaml              # 프로젝트 의존성
@@ -241,7 +257,10 @@ samsung_health_clone/
 ## 🎯 구현된 화면
 
 ### 메인 화면 구성 요소
-1. **헤더**: Samsung Health 로고와 연결 상태
+1. **헤더**: Samsung Health 로고, 연결 상태, 권한 요청 버튼, 데이터 읽기 버튼들
+   - **권한 요청**: Samsung Health 데이터 접근 권한 요청
+   - **7일 걸음수**: 최근 7일간 걸음수 데이터 읽기 및 결과 표시
+   - **14일 합계**: 최근 14일간 일별 걸음수 합계 읽기 및 결과 표시
 2. **활동 요약**: 713 걸음, 7분, 27 kcal ⭐ **탭하여 상세 화면 이동**
 3. **수면 점수**: 78점 (좋음), 7시간 33분 수면 ⭐ **탭하여 상세 화면 이동**
 4. **활동 바로가기**: 4개 활동 버튼 ⭐ **탭하여 운동 시작 화면 이동**
@@ -342,6 +361,92 @@ Samsung Health 데이터 접근을 위한 종합적인 권한 관리 시스템�
 - **권한 요청 다이얼로그**: 명확한 권한 설명
 - **권한 거부 가이드**: 설정 이동 및 재시도 옵션
 - **상태 표시**: 권한 승인/거부 상태 실시간 반영
+
+## 📊 Samsung Health Data SDK 통합 시스템 (최신)
+
+### 🔗 SDK 통합 개요
+실제 Samsung Health Data SDK를 통합하여 실제 건강 데이터를 읽고 처리하는 기능이 구현되었습니다.
+
+#### 🎯 주요 기능
+1. **Samsung Health 앱 확인**
+   - 앱 설치 여부 확인
+   - 버전 호환성 검사
+   - 미설치/버전 미만 시 Google Play Store로 자동 이동
+
+2. **HealthStore 연결 관리**
+   - Samsung Health Data SDK 연결/해제
+   - 연결 상태 모니터링
+   - 예외 처리 및 오류 복구
+
+3. **실제 건강 데이터 읽기**
+   - **7일간 걸음수 데이터**: 최근 7일간의 상세 걸음수 기록
+   - **14일간 일별 걸음수 합계**: AggregateRequest를 사용한 일별 집계 데이터
+   - **시간 범위 기반 쿼리**: setLocalTimeRange() 활용
+   - **안전한 리소스 관리**: use {} 블록으로 자동 정리
+
+#### 🏗️ 기술적 구현
+
+##### Android Native 코드
+- **HealthStoreManager**: Samsung Health SDK 연결 및 데이터 해석 관리
+- **HealthDataResolver**: 실제 건강 데이터 읽기 및 처리
+- **HealthPermissionManager**: 권한 관리 및 사용자 동의 처리
+- **Kotlin Coroutines**: 비동기 데이터 처리 (suspend 함수)
+
+##### Flutter 연동
+- **MethodChannel**: Flutter와 Android 간 양방향 통신
+- **PlatformException 처리**: 네이티브 오류를 Flutter로 전달
+- **실시간 UI 업데이트**: 데이터 읽기 결과를 즉시 화면에 반영
+
+#### 📱 사용자 인터페이스
+- **홈 화면 헤더**: 
+  - "7일 걸음수" 버튼: 최근 7일간 걸음수 데이터 읽기
+  - "14일 합계" 버튼: 최근 14일간 일별 걸음수 합계 읽기
+- **실시간 피드백**: SnackBar를 통한 데이터 읽기 결과 표시
+- **오류 처리**: 사용자 친화적인 오류 메시지
+
+#### 🔧 데이터 처리 기능
+
+##### 7일간 걸음수 데이터 읽기
+```kotlin
+suspend fun readStepCountForLast7Days(): List<StepCountData>
+```
+- **기능**: 최근 7일간의 상세 걸음수 데이터 읽기
+- **사용 상수**: HealthConstants.StepCount
+- **시간 범위**: setLocalTimeRange() 활용
+- **리소스 관리**: use {} 블록으로 안전한 정리
+
+##### 14일간 일별 걸음수 합계
+```kotlin
+suspend fun readDailyStepCountForLast14Days(): AggregateResult
+```
+- **기능**: AggregateRequest를 사용한 일별 걸음수 집계
+- **Alias 설정**: sum_count (걸음수 합계), day (날짜)
+- **도메인 모델**: DailyStepCount(date, totalSteps)
+- **확장 함수**: toDailyStepCountList()로 변환
+
+#### 📦 의존성 관리
+- **로컬 AAR 파일**: samsung-health-data-api-1.0.0.aar
+- **Gradle 설정**: 
+  - minSdk: 29
+  - Java 8 compileOptions
+  - Kotlin JVM target: 1.8
+- **추가 라이브러리**:
+  - Gson: JSON 직렬화/역직렬화
+  - Kotlin Parcelize: Android Parcelable 구현
+  - Kotlin Coroutines: 비동기 처리
+
+#### 🛡️ 예외 처리
+- **OLD_VERSION_PLATFORM**: ResolvablePlatformException.resolve(activity)로 스토어 이동
+- **연결 실패**: 토스트 메시지로 사용자 알림
+- **권한 거부**: 가이드 다이얼로그 및 재시도 옵션
+- **데이터 읽기 실패**: 사용자 친화적인 오류 메시지
+
+#### 📋 AndroidManifest.xml 권한 설정
+```xml
+<uses-permission android:name="com.samsung.android.health.permission.read.STEP_COUNT" />
+<uses-permission android:name="com.samsung.android.health.permission.read.SLEEP" />
+<uses-permission android:name="com.samsung.android.health.permission.write.WEIGHT" />
+```
 
 ## 🔧 개발 환경 설정
 
