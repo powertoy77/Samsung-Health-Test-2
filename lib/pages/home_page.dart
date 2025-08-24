@@ -10,6 +10,7 @@ import 'detail_pages/workout_start_page.dart';
 import 'detail_pages/energy_score_detail_page.dart';
 import 'detail_pages/sleep_coaching_start_page.dart';
 import 'detail_pages/all_workouts_page.dart';
+import 'detail_pages/workout_history_page.dart';
 import 'detail_pages/steps_detail_page.dart';
 import 'tab_pages/together_page.dart';
 import 'tab_pages/discover_page.dart';
@@ -696,7 +697,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const AllWorkoutsPage(),
+            builder: (context) => const WorkoutHistoryPage(),
           ),
         );
       },
