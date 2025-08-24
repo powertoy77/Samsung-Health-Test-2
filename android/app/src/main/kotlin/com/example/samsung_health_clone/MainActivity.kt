@@ -21,6 +21,7 @@ class MainActivity : FlutterActivity() {
     }
 
     private lateinit var healthStoreManager: HealthStoreManager
+    private lateinit var permissionHelper: HealthPermissionHelper
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -156,6 +157,87 @@ class MainActivity : FlutterActivity() {
                         result.error("HEALTH_STORE_ERROR", e.message, null)
                     }
                 }
+                // 새로운 권한 관리 메서드들
+                "requestAllPermissions" -> {
+                    try {
+                        permissionHelper.requestAllPermissions(this, object : HealthPermissionHelper.PermissionCallback {
+                            override fun onPermissionGranted(permissions: List<String>) {
+                                result.success("모든 권한이 승인되었습니다")
+                            }
+                            override fun onPermissionDenied(permissions: List<String>) {
+                                result.error("PERMISSION_DENIED", "권한이 거부되었습니다", null)
+                            }
+                            override fun onPermissionError(error: String) {
+                                result.error("PERMISSION_ERROR", error, null)
+                            }
+                        })
+                    } catch (e: Exception) {
+                        result.error("PERMISSION_ERROR", e.message, null)
+                    }
+                }
+                "requestStepCountPermission" -> {
+                    try {
+                        permissionHelper.requestPermission(this, HealthPermissionHelper.PERMISSION_STEP_COUNT, object : HealthPermissionHelper.PermissionCallback {
+                            override fun onPermissionGranted(permissions: List<String>) {
+                                result.success("걸음수 권한이 승인되었습니다")
+                            }
+                            override fun onPermissionDenied(permissions: List<String>) {
+                                result.error("PERMISSION_DENIED", "걸음수 권한이 거부되었습니다", null)
+                            }
+                            override fun onPermissionError(error: String) {
+                                result.error("PERMISSION_ERROR", error, null)
+                            }
+                        })
+                    } catch (e: Exception) {
+                        result.error("PERMISSION_ERROR", e.message, null)
+                    }
+                }
+                "requestSleepPermission" -> {
+                    try {
+                        permissionHelper.requestPermission(this, HealthPermissionHelper.PERMISSION_SLEEP, object : HealthPermissionHelper.PermissionCallback {
+                            override fun onPermissionGranted(permissions: List<String>) {
+                                result.success("수면 권한이 승인되었습니다")
+                            }
+                            override fun onPermissionDenied(permissions: List<String>) {
+                                result.error("PERMISSION_DENIED", "수면 권한이 거부되었습니다", null)
+                            }
+                            override fun onPermissionError(error: String) {
+                                result.error("PERMISSION_ERROR", error, null)
+                            }
+                        })
+                    } catch (e: Exception) {
+                        result.error("PERMISSION_ERROR", e.message, null)
+                    }
+                }
+                "requestWeightPermission" -> {
+                    try {
+                        permissionHelper.requestPermission(this, HealthPermissionHelper.PERMISSION_WEIGHT, object : HealthPermissionHelper.PermissionCallback {
+                            override fun onPermissionGranted(permissions: List<String>) {
+                                result.success("체중 권한이 승인되었습니다")
+                            }
+                            override fun onPermissionDenied(permissions: List<String>) {
+                                result.error("PERMISSION_DENIED", "체중 권한이 거부되었습니다", null)
+                            }
+                            override fun onPermissionError(error: String) {
+                                result.error("PERMISSION_ERROR", error, null)
+                            }
+                        })
+                    } catch (e: Exception) {
+                        result.error("PERMISSION_ERROR", e.message, null)
+                    }
+                }
+                "hasAllPermissions" -> {
+                    result.success(permissionHelper.hasAllPermissions())
+                }
+                "hasStepCountPermission" -> {
+                    result.success(permissionHelper.hasPermission(HealthPermissionHelper.PERMISSION_STEP_COUNT))
+                }
+                "hasSleepPermission" -> {
+                    result.success(permissionHelper.hasPermission(HealthPermissionHelper.PERMISSION_SLEEP))
+                }
+                "hasWeightPermission" -> {
+                    result.success(permissionHelper.hasPermission(HealthPermissionHelper.PERMISSION_WEIGHT))
+                }
                 else -> {
                     result.notImplemented()
                 }
@@ -168,6 +250,9 @@ class MainActivity : FlutterActivity() {
 
         // HealthStoreManager 초기화
         healthStoreManager = HealthStoreManager.getInstance(this)
+        
+        // PermissionHelper 초기화
+        permissionHelper = HealthPermissionHelper.getInstance(this)
 
         // 연결 콜백 설정
         healthStoreManager.setConnectionCallback(object : HealthStoreManager.ConnectionCallback {

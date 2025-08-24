@@ -168,6 +168,98 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
                 }
               }
 
+              // 새로운 권한 관리 메서드들
+              Future<void> _requestAllPermissions() async {
+                try {
+                  await _channel.invokeMethod('requestAllPermissions');
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('모든 권한이 승인되었습니다'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  }
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('권한 요청 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }
+              }
+
+              Future<bool> _hasAllPermissions() async {
+                try {
+                  final result = await _channel.invokeMethod('hasAllPermissions');
+                  return result as bool;
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('권한 상태 확인 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                  return false;
+                }
+              }
+
+              Future<bool> _hasStepCountPermission() async {
+                try {
+                  final result = await _channel.invokeMethod('hasStepCountPermission');
+                  return result as bool;
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('걸음수 권한 상태 확인 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                  return false;
+                }
+              }
+
+              Future<bool> _hasSleepPermission() async {
+                try {
+                  final result = await _channel.invokeMethod('hasSleepPermission');
+                  return result as bool;
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('수면 권한 상태 확인 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                  return false;
+                }
+              }
+
+              Future<bool> _hasWeightPermission() async {
+                try {
+                  final result = await _channel.invokeMethod('hasWeightPermission');
+                  return result as bool;
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('체중 권한 상태 확인 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                  return false;
+                }
+              }
+
               // 데이터 읽기 메서드들
               Future<List<Map<String, dynamic>>> _readStepCount(DateTime startTime, DateTime endTime) async {
                 try {
@@ -303,27 +395,51 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
             ),
           ),
           const SizedBox(height: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.watch, color: Colors.white, size: 16),
-                const SizedBox(width: 4),
-                Text(
-                  '연결됨',
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.watch, color: Colors.white, size: 16),
+                    const SizedBox(width: 4),
+                    Text(
+                      '연결됨',
+                      style: GoogleFonts.notoSans(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ElevatedButton.icon(
+                onPressed: () => _requestAllPermissions(),
+                icon: const Icon(Icons.security, size: 16),
+                label: Text(
+                  '권한 요청',
                   style: GoogleFonts.notoSans(
-                    color: Colors.white,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-              ],
-            ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
