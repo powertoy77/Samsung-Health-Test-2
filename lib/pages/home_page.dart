@@ -99,10 +99,10 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
             icon: Icon(Icons.flag),
             label: '투게더',
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            label: '발견',
-          ),
+                     const BottomNavigationBarItem(
+             icon: Icon(Icons.explore),
+             label: 'Discover',
+           ),
           BottomNavigationBarItem(
             icon: Stack(
               children: [
