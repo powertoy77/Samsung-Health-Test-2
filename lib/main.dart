@@ -40,25 +40,9 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   @override
   void initState() {
     super.initState();
-    // 앱 시작 시 Samsung Health 확인
-    _checkSamsungHealth();
   }
   
-  Future<void> _checkSamsungHealth() async {
-    try {
-      await _channel.invokeMethod('checkSamsungHealth');
-    } on PlatformException catch (e) {
-      // Android에서 발생한 에러를 토스트로 표시
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Samsung Health 확인 중 오류: ${e.message}'),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-      }
-    }
-  }
+
   
                 Future<void> _connectHealthStore() async {
                 try {
@@ -260,47 +244,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
                 }
               }
 
-                // 최근 7일간 걸음수 데이터 읽기
-  Future<List<Map<String, dynamic>>> _readStepCountForLast7Days() async {
-    try {
-      final result = await _channel.invokeMethod('readStepCountForLast7Days');
-      if (result is List) {
-        return result.cast<Map<String, dynamic>>();
-      }
-      return [];
-    } on PlatformException catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('걸음수 데이터 읽기 중 오류: ${e.message}'),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-      }
-      return [];
-    }
-  }
 
-  // 최근 14일간 일별 걸음수 합계 읽기
-  Future<List<Map<String, dynamic>>> _readDailyStepCountForLast14Days() async {
-    try {
-      final result = await _channel.invokeMethod('readDailyStepCountForLast14Days');
-      if (result is List) {
-        return result.cast<Map<String, dynamic>>();
-      }
-      return [];
-    } on PlatformException catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('일별 걸음수 합계 읽기 중 오류: ${e.message}'),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-      }
-      return [];
-    }
-  }
 
               // 데이터 읽기 메서드들
               Future<List<Map<String, dynamic>>> _readStepCount(DateTime startTime, DateTime endTime) async {
@@ -483,74 +427,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    final stepData = await _readStepCountForLast7Days();
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('최근 7일간 걸음수 데이터: ${stepData.length}개'),
-                          duration: const Duration(seconds: 3),
-                        ),
-                      );
-                    }
-                  },
-                  icon: const Icon(Icons.directions_walk, size: 16),
-                  label: Text(
-                    '7일 걸음수',
-                    style: GoogleFonts.notoSans(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    final dailyStepData = await _readDailyStepCountForLast14Days();
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('최근 14일간 일별 걸음수 합계: ${dailyStepData.length}개'),
-                          duration: const Duration(seconds: 3),
-                        ),
-                      );
-                    }
-                  },
-                  icon: const Icon(Icons.trending_up, size: 16),
-                  label: Text(
-                    '14일 합계',
-                    style: GoogleFonts.notoSans(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+
         ],
       ),
     );

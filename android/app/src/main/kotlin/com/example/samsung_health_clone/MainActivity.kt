@@ -1,8 +1,6 @@
 package com.example.samsung_health_clone
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
+
 import android.os.Bundle
 import android.widget.Toast
 import io.flutter.embedding.android.FlutterActivity
@@ -17,8 +15,6 @@ import kotlinx.coroutines.launch
 class MainActivity : FlutterActivity() {
 
     companion object {
-        private const val SAMSUNG_HEALTH_PACKAGE = "com.sec.android.app.health"
-        private const val MIN_SAMSUNG_HEALTH_VERSION = 6.25f
         private const val CHANNEL = "samsung_health_check"
         private const val TAG = "MainActivity"
     }
@@ -31,14 +27,7 @@ class MainActivity : FlutterActivity() {
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             when (call.method) {
-                "checkSamsungHealth" -> {
-                    try {
-                        checkSamsungHealthAvailability()
-                        result.success("Samsung Health 확인 완료")
-                    } catch (e: Exception) {
-                        result.error("SAMSUNG_HEALTH_ERROR", e.message, null)
-                    }
-                }
+
                 "connectHealthStore" -> {
                     try {
                         healthStoreManager.connect(this)
@@ -241,44 +230,7 @@ class MainActivity : FlutterActivity() {
                 "hasWeightPermission" -> {
                     result.success(permissionHelper.hasPermission(HealthPermissionHelper.PERMISSION_WEIGHT))
                 }
-                                            "readStepCountForLast7Days" -> {
-                                // suspend 함수를 호출하기 위해 코루틴 사용
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    try {
-                                        val stepCountData = healthStoreManager.readStepCountForLast7Days()
-                                        val stepCountList = stepCountData.map { stepData ->
-                                            mapOf(
-                                                "startTime" to stepData.startTime,
-                                                "endTime" to stepData.endTime,
-                                                "stepCount" to stepData.stepCount
-                                            )
-                                        }
-                                        result.success(stepCountList)
-                                    } catch (e: Exception) {
-                                        Log.e("MainActivity", "걸음수 데이터 읽기 실패: ${e.message}")
-                                        result.error("STEP_COUNT_READ_ERROR", e.message, null)
-                                    }
-                                }
-                            }
-                            "readDailyStepCountForLast14Days" -> {
-                                // suspend 함수를 호출하기 위해 코루틴 사용
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    try {
-                                        val aggregateResult = healthStoreManager.readDailyStepCountForLast14Days()
-                                        val dailyStepCountList = aggregateResult.toDailyStepCountList()
-                                        val resultList = dailyStepCountList.map { dailyStep ->
-                                            mapOf(
-                                                "date" to dailyStep.date,
-                                                "totalSteps" to dailyStep.totalSteps
-                                            )
-                                        }
-                                        result.success(resultList)
-                                    } catch (e: Exception) {
-                                        Log.e("MainActivity", "일별 걸음수 합계 읽기 실패: ${e.message}")
-                                        result.error("DAILY_STEP_COUNT_READ_ERROR", e.message, null)
-                                    }
-                                }
-                            }
+
                 else -> {
                     result.notImplemented()
                 }
@@ -312,97 +264,7 @@ class MainActivity : FlutterActivity() {
                 Toast.makeText(this@MainActivity, "HealthStoreManager 오류: $error", Toast.LENGTH_LONG).show()
             }
         })
-
-        checkSamsungHealthAvailability()
     }
 
-    private fun checkSamsungHealthAvailability() {
-        try {
-            val packageInfo = packageManager.getPackageInfo(SAMSUNG_HEALTH_PACKAGE, 0)
-            val versionName = packageInfo.versionName ?: ""
 
-            val versionNumber = extractVersionNumber(versionName)
-
-            if (versionNumber < MIN_SAMSUNG_HEALTH_VERSION) {
-                showSamsungHealthUpdateDialog()
-            } else {
-                println("Samsung Health 확인 완료: 버전 $versionName")
-
-                // Samsung Health SDK 연결 시도
-                try {
-                    healthStoreManager.connect(this)
-                } catch (e: Exception) {
-                    Log.e(TAG, "Samsung Health SDK 연결 실패: ${e.message}")
-                }
-            }
-
-        } catch (e: PackageManager.NameNotFoundException) {
-            showSamsungHealthInstallDialog()
-        } catch (e: Exception) {
-            val errorMessage = "Samsung Health 확인 중 오류 발생: ${e.message}"
-            println(errorMessage)
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun extractVersionNumber(versionName: String): Float {
-        return try {
-            val versionParts = versionName.split(".")
-            if (versionParts.size >= 2) {
-                "${versionParts[0]}.${versionParts[1]}".toFloat()
-            } else {
-                versionName.toFloat()
-            }
-        } catch (e: NumberFormatException) {
-            0.0f
-        }
-    }
-
-    private fun showSamsungHealthInstallDialog() {
-        try {
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse("market://details?id=$SAMSUNG_HEALTH_PACKAGE")
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent)
-            } else {
-                val webIntent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse("https://play.google.com/store/apps/details?id=$SAMSUNG_HEALTH_PACKAGE")
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-                startActivity(webIntent)
-            }
-
-        } catch (e: Exception) {
-            val errorMessage = "Samsung Health 설치 페이지 이동 실패: ${e.message}"
-            println(errorMessage)
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun showSamsungHealthUpdateDialog() {
-        try {
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse("market://details?id=$SAMSUNG_HEALTH_PACKAGE")
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent)
-            } else {
-                val webIntent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse("https://play.google.com/store/apps/details?id=$SAMSUNG_HEALTH_PACKAGE")
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-                startActivity(webIntent)
-            }
-
-        } catch (e: Exception) {
-            val errorMessage = "Samsung Health 업데이트 페이지 이동 실패: ${e.message}"
-            println(errorMessage)
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
-        }
-    }
 }
