@@ -488,74 +488,84 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   }
 
   Widget _buildSleepCoachingCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SleepCoachingStartPage(),
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: Colors.orange[100],
-              borderRadius: BorderRadius.circular(25),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
             ),
-            child: const Icon(
-              Icons.pets,
-              color: Colors.orange,
-              size: 30,
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.orange[100],
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: const Icon(
+                Icons.pets,
+                color: Colors.orange,
+                size: 30,
+              ),
             ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.purple[100],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    '수면 코칭',
-                    style: GoogleFonts.notoSans(
-                      fontSize: 12,
-                      color: Colors.purple[700],
-                      fontWeight: FontWeight.w500,
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.purple[100],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      '수면 코칭',
+                      style: GoogleFonts.notoSans(
+                        fontSize: 12,
+                        color: Colors.purple[700],
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '내 수면 동물 유형을 확인하려면 7일 동안 수면을',
-                  style: GoogleFonts.notoSans(
-                    fontSize: 12,
-                    color: Colors.grey[600],
+                  const SizedBox(height: 4),
+                  Text(
+                    '내 수면 동물 유형을 확인하려면 7일 동안 수면을',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
                   ),
-                ),
-                Text(
-                  '기록해 보세요.',
-                  style: GoogleFonts.notoSans(
-                    fontSize: 12,
-                    color: Colors.grey[600],
+                  Text(
+                    '기록해 보세요.',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -1873,36 +1883,84 @@ class _SleepDetailPageState extends State<SleepDetailPage> {
   }
 
   Widget _buildSleepCoachingCard() {
-    return _buildDetailCard(
-      '수면 코칭',
-      Icons.pets,
-      Row(
-        children: [
-          Icon(Icons.pets, size: 40, color: Colors.orange),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '수면 코칭을 다시 진행할까요?',
-                  style: GoogleFonts.notoSans(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '원한다면 언제든 다시 시작할 수 있습니다.',
-                  style: GoogleFonts.notoSans(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SleepCoachingStartPage(),
           ),
-        ],
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.orange[100],
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: const Icon(
+                Icons.pets,
+                color: Colors.orange,
+                size: 30,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.purple[100],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      '수면 코칭',
+                      style: GoogleFonts.notoSans(
+                        fontSize: 12,
+                        color: Colors.purple[700],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '내 수면 동물 유형을 확인하려면 7일 동안 수면을',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  Text(
+                    '기록해 보세요.',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -2997,6 +3055,201 @@ class _EnergyScoreDetailPageState extends State<EnergyScoreDetailPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class SleepCoachingStartPage extends StatefulWidget {
+  const SleepCoachingStartPage({super.key});
+
+  @override
+  State<SleepCoachingStartPage> createState() => _SleepCoachingStartPageState();
+}
+
+class _SleepCoachingStartPageState extends State<SleepCoachingStartPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          '내 수면 유형 확인하기',
+          style: GoogleFonts.notoSans(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildAnimalTypesCard(),
+            const SizedBox(height: 24),
+            _buildInformationSection(),
+            const SizedBox(height: 32),
+            _buildNextButton(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAnimalTypesCard() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildAnimalIcon('🦔', '고슴도치'),
+          _buildAnimalIcon('🐧', '펭귄'),
+          _buildAnimalIcon('🦁', '사자'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAnimalIcon(String emoji, String label) {
+    return Column(
+      children: [
+        Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            borderRadius: BorderRadius.circular(40),
+            border: Border.all(color: Colors.grey[300]!, width: 2),
+          ),
+          child: Center(
+            child: Text(
+              emoji,
+              style: const TextStyle(fontSize: 40),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: GoogleFonts.notoSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInformationSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '수면 코칭 프로그램 안내',
+          style: GoogleFonts.notoSans(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildInfoParagraph(
+                '내 수면 유형을 확인하고 적절한 수면 코칭을 받아보세요. 최근 30일 중 7일 동안 수면을 기록해야 하며, 평일 전날 밤과 휴일 전날 밤을 각각 하루 이상 포함해야 합니다. 수면 데이터는 워치나 밴드 또는 링을 착용하고 잠을 자면 자동으로 기록됩니다.',
+              ),
+              const SizedBox(height: 16),
+              _buildInfoParagraph(
+                '수면을 개선할 필요가 있는 사람들에게 맞춤형 수면 코칭을 제공합니다. 수면 코칭은 3-4주 진행되며 수면의 질을 높이는 건강한 습관을 기를 수 있도록 도와줍니다.',
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoParagraph(String text) {
+    return Text(
+      text,
+      style: GoogleFonts.notoSans(
+        fontSize: 14,
+        color: Colors.black87,
+        height: 1.6,
+      ),
+    );
+  }
+
+  Widget _buildNextButton() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ElevatedButton(
+        onPressed: () {
+          // 다음 단계로 이동하는 로직
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                '수면 코칭을 시작합니다!',
+                style: GoogleFonts.notoSans(),
+              ),
+              backgroundColor: Colors.blue,
+            ),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.grey[300],
+          foregroundColor: Colors.black,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 0,
+        ),
+        child: Text(
+          '다음',
+          style: GoogleFonts.notoSans(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
