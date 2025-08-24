@@ -4,9 +4,9 @@
 
 ## 📱 프로젝트 개요
 
-이 프로젝트는 삼성 헬스 앱의 메인 화면을 Flutter로 구현한 것입니다. 실제 삼성 헬스 앱과 동일한 디자인과 레이아웃을 제공하며, **일일 활동 상세 페이지**, **수면 상세 페이지**, **운동 시작 페이지**, **에너지 점수 상세 페이지**, **수면 코칭 시작 페이지**, **모든 운동 페이지**, **걸음수 상세 페이지**, **투게더 페이지** 기능이 포함되어 있습니다. 
+이 프로젝트는 삼성 헬스 앱의 메인 화면을 Flutter로 구현한 것입니다. 실제 삼성 헬스 앱과 동일한 디자인과 레이아웃을 제공하며, **일일 활동 상세 페이지**, **수면 상세 페이지**, **운동 시작 페이지**, **에너지 점수 상세 페이지**, **수면 코칭 시작 페이지**, **모든 운동 페이지**, **걸음수 상세 페이지**, **투게더 페이지**, **Discover 페이지** 기능이 포함되어 있습니다. 
 
-**최신 업데이트**: 투게더 화면 구현 및 하단 네비게이션 연결이 완료되었습니다. 소셜 챌린지 및 리더보드 기능을 제공합니다.
+**최신 업데이트**: Discover 화면 구현 및 하단 네비게이션 연결이 완료되었습니다. Health Hub 온보딩 및 서비스 연동 기능을 제공합니다.
 
 ## 🚀 바로 시작하기
 
@@ -209,6 +209,33 @@
 - **반응형 레이아웃**과 **스크롤 가능한 콘텐츠**
 - **Google Fonts (Noto Sans)** 사용
 
+### 🔍 Discover 페이지 (신규 기능)
+**하단 네비게이션의 "Discover" 탭을 선택하면 이동하는 Health Hub 온보딩 화면**
+
+#### 📊 주요 구성 요소:
+1. **헤더 섹션**: "Discover" 제목, "For your healthy life" 부제목
+   - **더보기 메뉴**: 우상단 more_vert 아이콘
+
+2. **Health Hub 온보딩 카드**: 메인 기능 소개
+   - **그라데이션 배경**: 시각적으로 매력적인 배경
+   - **메인 텍스트**: "Health Hub onboarding", "Health Hub 서비스와 연동해보세요."
+   - **연결선**: CustomPaint로 그려진 아이콘 간 연결 네트워크
+   - **Health Hub 아이콘들**: 
+     - **Health Hub Platform**: 중앙 상단 플랫폼 아이콘
+     - **Sleep**: 수면 데이터 아이콘
+     - **Health Record**: 건강 기록 아이콘
+     - **Data**: 데이터 관리 아이콘
+     - **HEALTH HUB 스마트폰**: 중앙 하단 스마트폰 아이콘
+     - **의료진**: 의료진 아이콘
+
+#### 🎨 디자인 특징:
+- **Material Design 3** 적용
+- **그라데이션 배경**: 시각적 매력도 향상
+- **CustomPaint**: 연결선 그리기로 네트워크 시각화
+- **Stack 레이아웃**: 아이콘들의 정확한 위치 배치
+- **반응형 레이아웃**과 **스크롤 가능한 콘텐츠**
+- **Google Fonts (Noto Sans)** 사용
+
 ### 🎨 디자인 특징
 - Material Design 3 적용
 - Google Fonts (Noto Sans) 사용
@@ -260,7 +287,7 @@ flutter build apk --release
 ```
 samsung_health_clone/
 ├── lib/
-│   └── main.dart              # 메인 앱 파일 (홈, 투게더, Daily Activity, Sleep, Workout, Energy Score Detail Pages 포함)
+│   └── main.dart              # 메인 앱 파일 (홈, 투게더, Discover, Daily Activity, Sleep, Workout, Energy Score Detail Pages 포함)
 ├── android/                   # Android 플랫폼 설정
 │   ├── app/
 │   │   ├── src/main/
@@ -356,6 +383,15 @@ samsung_health_clone/
   - 달리기 9그룹 텀블러 가즈아 (종료, 우리 팀 승리!)
   - 삼성 헬스 X 펫박스 걷기 챌린지 (총 걸음 수: 110,932, 내 순위: 51,834)
   - 2025 올림픽 데이 챌린지 (진행 중, 진행률 바 표시)
+
+### Discover 페이지 (신규)
+- **헤더 섹션**: "Discover" 제목, "For your healthy life" 부제목, 더보기 메뉴
+- **Health Hub 온보딩 카드**: 그라데이션 배경의 메인 카드
+- **연결 네트워크**: CustomPaint로 그려진 아이콘 간 연결선
+- **Health Hub 아이콘들**: 
+  - Health Hub Platform, Sleep, Health Record, Data
+  - HEALTH HUB 스마트폰, 의료진
+- **메인 텍스트**: "Health Hub onboarding", "Health Hub 서비스와 연동해보세요."
 
 ## 🔐 Samsung Health 권한 관리 시스템 (신규)
 
