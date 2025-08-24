@@ -56,6 +56,9 @@ dependencies {
     
     // Kotlin parcelize for Samsung Health SDK
     implementation("org.jetbrains.kotlin:kotlin-parcelize-runtime:1.9.10")
+    
+    // Kotlin coroutines for suspend functions
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 }
 
 

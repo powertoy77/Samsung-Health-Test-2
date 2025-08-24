@@ -10,6 +10,9 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import android.util.Log
 import android.app.Activity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : FlutterActivity() {
 
@@ -238,6 +241,44 @@ class MainActivity : FlutterActivity() {
                 "hasWeightPermission" -> {
                     result.success(permissionHelper.hasPermission(HealthPermissionHelper.PERMISSION_WEIGHT))
                 }
+                                            "readStepCountForLast7Days" -> {
+                                // suspend 함수를 호출하기 위해 코루틴 사용
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    try {
+                                        val stepCountData = healthStoreManager.readStepCountForLast7Days()
+                                        val stepCountList = stepCountData.map { stepData ->
+                                            mapOf(
+                                                "startTime" to stepData.startTime,
+                                                "endTime" to stepData.endTime,
+                                                "stepCount" to stepData.stepCount
+                                            )
+                                        }
+                                        result.success(stepCountList)
+                                    } catch (e: Exception) {
+                                        Log.e("MainActivity", "걸음수 데이터 읽기 실패: ${e.message}")
+                                        result.error("STEP_COUNT_READ_ERROR", e.message, null)
+                                    }
+                                }
+                            }
+                            "readDailyStepCountForLast14Days" -> {
+                                // suspend 함수를 호출하기 위해 코루틴 사용
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    try {
+                                        val aggregateResult = healthStoreManager.readDailyStepCountForLast14Days()
+                                        val dailyStepCountList = aggregateResult.toDailyStepCountList()
+                                        val resultList = dailyStepCountList.map { dailyStep ->
+                                            mapOf(
+                                                "date" to dailyStep.date,
+                                                "totalSteps" to dailyStep.totalSteps
+                                            )
+                                        }
+                                        result.success(resultList)
+                                    } catch (e: Exception) {
+                                        Log.e("MainActivity", "일별 걸음수 합계 읽기 실패: ${e.message}")
+                                        result.error("DAILY_STEP_COUNT_READ_ERROR", e.message, null)
+                                    }
+                                }
+                            }
                 else -> {
                     result.notImplemented()
                 }
