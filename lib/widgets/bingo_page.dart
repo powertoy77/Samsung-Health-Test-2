@@ -23,6 +23,12 @@ class _BingoPageState extends State<BingoPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    
+    print('🎮 BingoPage - 초기화 시작');
+    print('   빙고 번호: ${widget.bingoNumbers}');
+    print('   선택된 상태: ${widget.bingoSelected}');
+    print('   선택된 개수: ${widget.bingoSelected.where((selected) => selected).length}');
+    
     _stampAnimationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -57,8 +63,11 @@ class _BingoPageState extends State<BingoPage> with TickerProviderStateMixin {
   }
 
   void _animateSelectedNumbers() async {
+    print('🎬 BingoPage - 선택된 번호들 애니메이션 시작');
+    
     for (int i = 0; i < widget.bingoSelected.length; i++) {
       if (widget.bingoSelected[i]) {
+        print('   번호 ${widget.bingoNumbers[i]} (인덱스: $i) 애니메이션 실행');
         setState(() {
           _animatedIndex = i;
         });
@@ -67,6 +76,8 @@ class _BingoPageState extends State<BingoPage> with TickerProviderStateMixin {
         await Future.delayed(const Duration(milliseconds: 200));
       }
     }
+    
+    print('✅ BingoPage - 모든 애니메이션 완료');
   }
 
   @override
@@ -113,14 +124,27 @@ class _BingoPageState extends State<BingoPage> with TickerProviderStateMixin {
                       ),
                     ],
                   ),
-                  child: const Center(
-                    child: Text(
-                      '운동 명언 빙고',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        const Text(
+                          '운동 명언 빙고',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '선택된 번호: ${widget.bingoSelected.where((selected) => selected).length}개',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
