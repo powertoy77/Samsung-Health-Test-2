@@ -330,39 +330,490 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
+      body: _selectedIndex == 0 ? _buildHomeContent() : _buildTogetherPage(),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        selectedItemColor: Colors.green,
+        unselectedItemColor: Colors.grey,
+        items: [
+          BottomNavigationBarItem(
+            icon: Stack(
+              children: [
+                const Icon(Icons.favorite),
+                if (_selectedIndex == 0)
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            label: '홈',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.flag),
+            label: '투게더',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.explore),
+            label: '발견',
+          ),
+          BottomNavigationBarItem(
+            icon: Stack(
+              children: [
+                const Icon(Icons.play_circle_outline),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            label: '피트니스',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: '내 페이지',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTogetherPage() {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
       body: SafeArea(
-        child: Column(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 헤더 섹션
+              _buildTogetherHeader(),
+              const SizedBox(height: 24),
+              
+              // 걸음 순위판 섹션
+              _buildStepLeaderboard(),
+              const SizedBox(height: 24),
+              
+              // 챌린지 카드들
+              _buildChallengeCards(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTogetherHeader() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '투게더',
+          style: GoogleFonts.notoSans(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 16),
+        
+        // 사용자 프로필 섹션
+        Row(
           children: [
-            // 헤더
-            _buildHeader(),
-            // 메인 콘텐츠
+            Stack(
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.blue[100],
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.person,
+                    size: 30,
+                    color: Colors.blue,
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 2),
+                    ),
+                    child: const Icon(
+                      Icons.keyboard_arrow_up,
+                      size: 12,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 12),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '탐험가',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  Text(
+                    'Lv. 20',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '친구',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                Text(
+                  '669',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        
+        // 도전 만들기 버튼
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Center(
+            child: Text(
+              '도전 만들기',
+              style: GoogleFonts.notoSans(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStepLeaderboard() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '걸음 순위판',
+          style: GoogleFonts.notoSans(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 16),
+        
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildLeaderboardItem(
+                rank: 1,
+                name: '나',
+                profileColor: Colors.blue[100]!,
+                barHeight: 120,
+                isMe: true,
+              ),
+              _buildLeaderboardItem(
+                rank: 2,
+                name: '하진옥',
+                profileColor: Colors.pink[100]!,
+                barHeight: 80,
+                isMe: false,
+              ),
+              _buildLeaderboardItem(
+                rank: 3,
+                name: 'seungwok.han.in',
+                profileColor: Colors.amber[100]!,
+                barHeight: 60,
+                isMe: false,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLeaderboardItem({
+    required int rank,
+    required String name,
+    required Color profileColor,
+    required double barHeight,
+    required bool isMe,
+  }) {
+    return Column(
+      children: [
+        Container(
+          width: 60,
+          height: barHeight,
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: profileColor,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            Icons.person,
+            color: profileColor.withOpacity(0.7),
+            size: 20,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          name,
+          style: GoogleFonts.notoSans(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '$rank',
+          style: GoogleFonts.notoSans(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.green,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildChallengeCards() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildChallengeCard(
+          title: '달리기 9그룹 텀블러 가즈아',
+          status: '7월 20일에 종료됨',
+          result: '우리 팀 승리!',
+          icon: Icons.emoji_events,
+          iconColor: Colors.amber,
+          canDismiss: true,
+        ),
+        const SizedBox(height: 12),
+        _buildChallengeCard(
+          title: '삼성 헬스 X 펫박스 걷기 챌린지',
+          status: '총 걸음 수: 110,932',
+          result: '내 순위: 51,834',
+          icon: Icons.pets,
+          iconColor: Colors.brown,
+          canDismiss: true,
+        ),
+        const SizedBox(height: 12),
+        _buildChallengeCard(
+          title: '2025 올림픽 데이 챌린지',
+          status: '도전 결과를 기다리는 중...',
+          result: '총 걸음 수: 345,401',
+          icon: Icons.sports_soccer,
+          iconColor: Colors.blue,
+          canDismiss: false,
+          showProgress: true,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildChallengeCard({
+    required String title,
+    required String status,
+    required String result,
+    required IconData icon,
+    required Color iconColor,
+    required bool canDismiss,
+    bool showProgress = false,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: iconColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  icon,
+                  color: iconColor,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildActivitySummaryCard(),
-                    const SizedBox(height: 16),
-                    _buildSleepScoreCard(),
-                    const SizedBox(height: 16),
-                    _buildActivityShortcutsCard(),
-                    const SizedBox(height: 16),
-                    _buildEnergyScoreCard(),
-                    const SizedBox(height: 16),
-                    _buildSleepCoachingCard(),
-                    const SizedBox(height: 16),
-                    _buildWeeklyExerciseCard(),
-                    const SizedBox(height: 16),
-                    _buildStepsGoalCard(),
-                    const SizedBox(height: 16),
+                    Text(
+                      title,
+                      style: GoogleFonts.notoSans(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      status,
+                      style: GoogleFonts.notoSans(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
                   ],
                 ),
               ),
+              if (canDismiss)
+                IconButton(
+                  icon: const Icon(Icons.close, size: 20),
+                  onPressed: () {},
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            result,
+            style: GoogleFonts.notoSans(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.green,
             ),
-            // 하단 네비게이션
-            _buildBottomNavigation(),
+          ),
+          if (showProgress) ...[
+            const SizedBox(height: 8),
+            LinearProgressIndicator(
+              value: 0.7,
+              backgroundColor: Colors.grey[200],
+              valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+            ),
           ],
-        ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHomeContent() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(),
+          const SizedBox(height: 24),
+          _buildActivitySummaryCard(),
+          const SizedBox(height: 16),
+          _buildSleepScoreCard(),
+          const SizedBox(height: 16),
+          _buildActivityShortcutsCard(),
+          const SizedBox(height: 16),
+          _buildEnergyScoreCard(),
+          const SizedBox(height: 16),
+          _buildSleepCoachingCard(),
+          const SizedBox(height: 16),
+          _buildWeeklyWorkoutCard(),
+          const SizedBox(height: 16),
+          _buildStepGoalCard(),
+        ],
       ),
     );
   }
@@ -888,7 +1339,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
     );
   }
 
-  Widget _buildWeeklyExerciseCard() {
+  Widget _buildWeeklyWorkoutCard() {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -968,7 +1419,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
     );
   }
 
-  Widget _buildStepsGoalCard() {
+  Widget _buildStepGoalCard() {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -1040,107 +1491,6 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildBottomNavigation() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16, bottom: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'Secured by Knox',
-                  style: GoogleFonts.notoSans(
-                    fontSize: 10,
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: _selectedIndex,
-            onTap: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            selectedItemColor: Colors.green,
-            unselectedItemColor: Colors.grey,
-            items: [
-              BottomNavigationBarItem(
-                icon: Stack(
-                  children: [
-                    const Icon(Icons.favorite),
-                    if (_selectedIndex == 0)
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-                label: '홈',
-              ),
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.flag),
-                label: '투게더',
-              ),
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.explore),
-                label: 'Discover',
-              ),
-              BottomNavigationBarItem(
-                icon: Stack(
-                  children: [
-                    const Icon(Icons.play_circle_outline),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: Colors.orange,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                label: '피트니스',
-              ),
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: '내 페이지',
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
