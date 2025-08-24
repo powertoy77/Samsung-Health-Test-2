@@ -330,7 +330,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      body: _selectedIndex == 0 ? _buildHomeContent() : _buildTogetherPage(),
+      body: _getBodyForIndex(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
@@ -398,6 +398,19 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
         ],
       ),
     );
+  }
+
+  Widget _getBodyForIndex(int index) {
+    switch (index) {
+      case 0:
+        return _buildHomeContent();
+      case 1:
+        return _buildTogetherPage();
+      case 2:
+        return _buildDiscoverPage();
+      default:
+        return _buildHomeContent();
+    }
   }
 
   Widget _buildTogetherPage() {
@@ -788,6 +801,271 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
             ),
           ],
         ],
+      ),
+    );
+  }
+
+  Widget _buildDiscoverPage() {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 헤더 섹션
+              _buildDiscoverHeader(),
+              const SizedBox(height: 24),
+              
+              // Health Hub 온보딩 카드
+              _buildHealthHubOnboardingCard(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDiscoverHeader() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Discover',
+              style: GoogleFonts.notoSans(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            Text(
+              'For your healthy life',
+              style: GoogleFonts.notoSans(
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+            ),
+          ],
+        ),
+        IconButton(
+          icon: const Icon(Icons.more_vert),
+          onPressed: () {},
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHealthHubOnboardingCard() {
+    return Container(
+      width: double.infinity,
+      height: 400,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.teal[300]!,
+            Colors.blue[400]!,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          // 연결선들
+          _buildConnectionLines(),
+          
+          // 아이콘들과 라벨들
+          _buildHealthHubIcons(),
+          
+          // 메인 텍스트
+          Positioned(
+            bottom: 40,
+            left: 20,
+            right: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Health Hub onboarding',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Health Hub 서비스와 연동해보세요.',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildConnectionLines() {
+    return CustomPaint(
+      size: const Size(double.infinity, double.infinity),
+      painter: ConnectionLinesPainter(),
+    );
+  }
+
+  Widget _buildHealthHubIcons() {
+    return Stack(
+      children: [
+        // 상단 왼쪽 - Health Hub Platform
+        Positioned(
+          top: 40,
+          left: 20,
+          child: _buildIconWithLabel(
+            Icons.favorite,
+            'Health Hub Platform',
+            'Health Hub 제공',
+            Colors.red,
+          ),
+        ),
+        
+        // 상단 중앙 - Sleep
+        Positioned(
+          top: 40,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: _buildIconWithLabel(
+              Icons.bedtime,
+              'Sleep',
+              '',
+              Colors.white,
+            ),
+          ),
+        ),
+        
+        // 상단 오른쪽 - Health Record
+        Positioned(
+          top: 40,
+          right: 20,
+          child: _buildIconWithLabel(
+            Icons.medical_services,
+            'Health Record',
+            '',
+            Colors.white,
+          ),
+        ),
+        
+        // 하단 왼쪽 - Data
+        Positioned(
+          bottom: 120,
+          left: 20,
+          child: _buildIconWithLabel(
+            Icons.people,
+            'Data',
+            '',
+            Colors.white,
+          ),
+        ),
+        
+        // 하단 중앙 - HEALTH HUB 스마트폰
+        Positioned(
+          bottom: 120,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: _buildSmartphoneIcon(),
+          ),
+        ),
+        
+        // 하단 오른쪽 - 의료진
+        Positioned(
+          bottom: 120,
+          right: 20,
+          child: _buildIconWithLabel(
+            Icons.medical_services,
+            '',
+            '',
+            Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildIconWithLabel(IconData icon, String title, String subtitle, Color color) {
+    return Column(
+      children: [
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.2),
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white, width: 2),
+          ),
+          child: Icon(icon, color: Colors.white, size: 20),
+        ),
+        if (title.isNotEmpty) ...[
+          const SizedBox(height: 4),
+          Text(
+            title,
+            style: GoogleFonts.notoSans(
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+        if (subtitle.isNotEmpty) ...[
+          Text(
+            subtitle,
+            style: GoogleFonts.notoSans(
+              fontSize: 8,
+              color: Colors.white70,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildSmartphoneIcon() {
+    return Container(
+      width: 50,
+      height: 60,
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.white, width: 2),
+      ),
+      child: Center(
+        child: Text(
+          'HEALTH\nHUB',
+          style: GoogleFonts.notoSans(
+            fontSize: 8,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
@@ -4994,4 +5272,51 @@ class _StepsDetailPageState extends State<StepsDetailPage> {
       ),
     );
   }
+}
+
+class ConnectionLinesPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withOpacity(0.3)
+      ..strokeWidth = 1.0
+      ..style = PaintingStyle.stroke;
+
+    // 상단 중앙에서 하단 중앙으로 연결
+    canvas.drawLine(
+      Offset(size.width / 2, 80),
+      Offset(size.width / 2, size.height - 160),
+      paint,
+    );
+
+    // 상단 왼쪽에서 하단 왼쪽으로 연결
+    canvas.drawLine(
+      Offset(40, 80),
+      Offset(40, size.height - 160),
+      paint,
+    );
+
+    // 상단 오른쪽에서 하단 오른쪽으로 연결
+    canvas.drawLine(
+      Offset(size.width - 40, 80),
+      Offset(size.width - 40, size.height - 160),
+      paint,
+    );
+
+    // 가로 연결선들
+    canvas.drawLine(
+      Offset(40, 80),
+      Offset(size.width - 40, 80),
+      paint,
+    );
+
+    canvas.drawLine(
+      Offset(40, size.height - 160),
+      Offset(size.width - 40, size.height - 160),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
