@@ -408,6 +408,8 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
         return _buildTogetherPage();
       case 2:
         return _buildDiscoverPage();
+      case 3:
+        return _buildFitnessPage();
       default:
         return _buildHomeContent();
     }
@@ -5273,6 +5275,491 @@ class _StepsDetailPageState extends State<StepsDetailPage> {
     );
   }
 }
+
+  Widget _buildFitnessPage() {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      body: SafeArea(
+        child: Column(
+          children: [
+            // 헤더
+            _buildFitnessHeader(),
+            // 메인 콘텐츠
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+                    
+                    // IFIT Workouts 섹션
+                    _buildWorkoutSection(
+                      'IFIT Workouts',
+                      [
+                        _buildWorkoutCard('Yoga', 'iFIT>', 'assets/yoga.jpg', Colors.orange),
+                        _buildWorkoutCard('Pilates', 'iFIT>', 'assets/pilates.jpg', Colors.purple),
+                        _buildWorkoutCard('HIIT', 'iFIT>', 'assets/hiit.jpg', Colors.red),
+                      ],
+                    ),
+                    
+                    // Aruba Pilates Sculpting Series 섹션
+                    _buildWorkoutSection(
+                      'Aruba Pilates Sculpting Series',
+                      [
+                        _buildWorkoutCard('Arashi Beach Pilates Basics', '35:41 iFIT', 'assets/arashi.jpg', Colors.blue),
+                        _buildWorkoutCard('Mangel H', '35:41 iFIT', 'assets/mangel.jpg', Colors.green),
+                      ],
+                    ),
+                    
+                    // Worldwide Wellness Workouts 섹션
+                    _buildWorkoutSection(
+                      'Worldwide Wellness Workouts',
+                      [
+                        _buildWorkoutCard('HIIT Yoga Flow: Oahu', '34:33 iFIT', 'assets/oahu.jpg', Colors.teal),
+                        _buildWorkoutCard('Controlle', '20:56 iFIT', 'assets/controlle.jpg', Colors.indigo),
+                      ],
+                    ),
+                    
+                    // What's new 섹션
+                    _buildWorkoutSection(
+                      'What\'s new',
+                      [
+                        _buildWorkoutCard('Crossfit\'s Best Muscle Strength', '13:29 LILLIUS', 'assets/crossfit.jpg', Colors.pink, hasPlayButton: true),
+                        _buildWorkoutCard('Ballet Burn for Full-Bod...', '11:41 QUAT', 'assets/ballet.jpg', Colors.amber, hasPlayButton: true),
+                        _buildWorkoutCard('Making A Pretty Up', '13:26 LILLIUS', 'assets/upper_body.jpg', Colors.lightGreen, hasPlayButton: true),
+                      ],
+                    ),
+                    
+                    // Essential Training Tips 섹션
+                    _buildWorkoutSection(
+                      'Essential Training Tips for healthy running',
+                      [
+                        _buildWorkoutCard('Pre-Run Stretching', '09:16 Samsung Health', 'assets/stretching.jpg', Colors.blue, hasPlayButton: true),
+                        _buildWorkoutCard('Post-Run Stretching', '09:16 Samsung Health', 'assets/post_stretching.jpg', Colors.blue, hasPlayButton: true),
+                        _buildWorkoutCard('Core Strength Workout', '09:25 Samsung He', 'assets/core.jpg', Colors.blue, hasPlayButton: true),
+                      ],
+                    ),
+                    
+                    // Lose weight 섹션
+                    _buildWorkoutSection(
+                      'Lose weight the fun way, and start moving!',
+                      [
+                        _buildWorkoutCard('Shake the Day Off Mini-Class', '31:49 Zumba', 'assets/zumba.jpg', Colors.orange, hasPlayButton: true),
+                        _buildWorkoutCard('Get Hype', '30:48 Zumba', 'assets/get_hype.jpg', Colors.orange, hasPlayButton: true),
+                      ],
+                    ),
+                    
+                    // Core strength 섹션
+                    _buildWorkoutSection(
+                      'Workout to boost your core strength!',
+                      [
+                        _buildWorkoutCard('Perfect core workout', '08:22 Pocket Gym', 'assets/perfect_core.jpg', Colors.green, hasPlayButton: true),
+                        _buildWorkoutCard('Core wor', '08:28 Pocket', 'assets/core_work.jpg', Colors.green, hasPlayButton: true),
+                      ],
+                    ),
+                    
+                    // Sports Stars 섹션
+                    _buildWorkoutSection(
+                      'Workout Know-hows from Sports Stars',
+                      [
+                        _buildWorkoutCard('Crossfit\'s Best Muscle Stren...', '13:29 LILLIUS', 'assets/crossfit_stars.jpg', Colors.pink, hasPlayButton: true),
+                        _buildWorkoutCard('Making A', '15:26 LILLIUS', 'assets/making_a.jpg', Colors.lightGreen, hasPlayButton: true),
+                      ],
+                    ),
+                    
+                    // Home Gym 섹션
+                    _buildWorkoutSection(
+                      'Your Home, Your Gym – Train Like a Pro',
+                      [
+                        _buildWorkoutCard('Ballet Burn for Full-Body Bal...', '11:41 QUAT', 'assets/ballet_burn.jpg', Colors.amber, hasPlayButton: true),
+                        _buildWorkoutCard('Baroboar', '15:58 QUAT', 'assets/baroboar.jpg', Colors.amber, hasPlayButton: true),
+                      ],
+                    ),
+                    
+                    // At-home workouts 섹션
+                    _buildWorkoutSection(
+                      'The perfect at-home workouts',
+                      [
+                        _buildWorkoutCard('6 SQUAT VARIATIONS', '10:24 Pocket Gym', 'assets/squat.jpg', Colors.green, hasPlayButton: true),
+                        _buildWorkoutCard('10Min Fu', '10:26 Pocket', 'assets/10min_fu.jpg', Colors.green, hasPlayButton: true),
+                      ],
+                    ),
+                    
+                    // New fitness routine 섹션
+                    _buildWorkoutSection(
+                      'Start your new fitness routine today',
+                      [
+                        _buildWorkoutCard('Healthy Body Yoga', '14:10 FitOn', 'assets/healthy_yoga.jpg', Colors.purple, hasPlayButton: true),
+                        _buildWorkoutCard('Athletic', '14:10 FitOn', 'assets/athletic.jpg', Colors.purple, hasPlayButton: true),
+                      ],
+                    ),
+                    
+                    // Home workouts fun 섹션
+                    _buildWorkoutSection(
+                      'Home workouts? Keep it fun and exciting!',
+                      [
+                        _buildWorkoutCard('300 Squats Challenge! You c...', '17:58 BLESSLIFE', 'assets/300_squats.jpg', Colors.red, hasPlayButton: true),
+                        _buildWorkoutCard('12MIN "B', '12:17 BLESS', 'assets/12min_b.jpg', Colors.red, hasPlayButton: true),
+                      ],
+                    ),
+                    
+                    // Fitness Programs 섹션
+                    _buildFitnessProgramsSection(),
+                    
+                    // Partner Services 섹션
+                    _buildPartnerServicesSection(),
+                    
+                    // By Provider 섹션
+                    _buildByProviderSection(),
+                    
+                    const SizedBox(height: 100), // 하단 네비게이션 바 공간
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFitnessHeader() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              '피트니스',
+              style: GoogleFonts.notoSans(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.favorite_border, color: Colors.grey),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.grey),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.more_vert, color: Colors.grey),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWorkoutSection(String title, List<Widget> cards) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: GoogleFonts.notoSans(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Colors.grey),
+          ],
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 200,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: cards.length,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: const EdgeInsets.only(right: 12),
+                child: cards[index],
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  Widget _buildWorkoutCard(String title, String subtitle, String imagePath, Color color, {bool hasPlayButton = false}) {
+    return Container(
+      width: 160,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              Container(
+                height: 120,
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.2),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                  ),
+                ),
+                child: Center(
+                  child: Icon(
+                    Icons.fitness_center,
+                    size: 40,
+                    color: color,
+                  ),
+                ),
+              ),
+              if (hasPlayButton)
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.play_arrow,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.notoSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: GoogleFonts.notoSans(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFitnessProgramsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Fitness Programs',
+          style: GoogleFonts.notoSans(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildProgramCard('Weight loss', Icons.monitor_weight, Colors.orange),
+            _buildProgramCard('Build muscle', Icons.fitness_center, Colors.blue),
+            _buildProgramCard('Endurance training', Icons.directions_run, Colors.green),
+          ],
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  Widget _buildProgramCard(String title, IconData icon, Color color) {
+    return Column(
+      children: [
+        Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            icon,
+            size: 40,
+            color: color,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          title,
+          style: GoogleFonts.notoSans(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPartnerServicesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Partner Services',
+          style: GoogleFonts.notoSans(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildServiceCard('Refresh Your Body and Mi...', Icons.refresh, Colors.purple),
+            _buildServiceCard('Get happy + Healthy with Z...', Icons.music_note, Colors.orange),
+            _buildServiceCard('Healthy li hand, Poc', Icons.group, Colors.green),
+          ],
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  Widget _buildServiceCard(String title, IconData icon, Color color) {
+    return Column(
+      children: [
+        Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            icon,
+            size: 40,
+            color: color,
+          ),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: 80,
+          child: Text(
+            title,
+            style: GoogleFonts.notoSans(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildByProviderSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'By Provider',
+          style: GoogleFonts.notoSans(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildProviderCard('iFIT>', Colors.blue),
+            _buildProviderCard('ZUMBA', Colors.green),
+            _buildProviderCard('FitOn', Colors.purple),
+            _buildProviderCard('Pocket Gym', Colors.orange),
+          ],
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  Widget _buildProviderCard(String name, Color color) {
+    return Column(
+      children: [
+        Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Text(
+              name,
+              style: GoogleFonts.notoSans(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
 class ConnectionLinesPainter extends CustomPainter {
   @override
