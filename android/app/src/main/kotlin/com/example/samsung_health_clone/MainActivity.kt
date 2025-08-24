@@ -53,20 +53,36 @@ class MainActivity : FlutterActivity() {
                 "isHealthStoreConnected" -> {
                     result.success(healthStoreManager.isConnected())
                 }
-                "getHealthStoreResolver" -> {
-                    val resolver = healthStoreManager.resolver()
-                    if (resolver != null) {
-                        result.success("HealthStore Resolver 사용 가능")
-                    } else {
-                        result.error("HEALTH_STORE_ERROR", "HealthStore가 연결되지 않았습니다", null)
+                "requestStepCountPermission" -> {
+                    try {
+                        healthStoreManager.requestPermission(this, PermissionKey.STEP_COUNT)
+                        result.success("걸음수 권한 요청 완료")
+                    } catch (e: Exception) {
+                        result.error("HEALTH_STORE_ERROR", e.message, null)
                     }
                 }
-                "getHealthStorePermissionManager" -> {
-                    val permissionManager = healthStoreManager.permissionManager()
-                    if (permissionManager != null) {
-                        result.success("HealthStore PermissionManager 사용 가능")
-                    } else {
-                        result.error("HEALTH_STORE_ERROR", "HealthStore가 연결되지 않았습니다", null)
+                "requestSleepPermission" -> {
+                    try {
+                        healthStoreManager.requestPermission(this, PermissionKey.SLEEP_SESSION)
+                        result.success("수면 권한 요청 완료")
+                    } catch (e: Exception) {
+                        result.error("HEALTH_STORE_ERROR", e.message, null)
+                    }
+                }
+                "hasStepCountPermission" -> {
+                    try {
+                        val hasPermission = healthStoreManager.hasPermission(PermissionKey.STEP_COUNT)
+                        result.success(hasPermission)
+                    } catch (e: Exception) {
+                        result.error("HEALTH_STORE_ERROR", e.message, null)
+                    }
+                }
+                "hasSleepPermission" -> {
+                    try {
+                        val hasPermission = healthStoreManager.hasPermission(PermissionKey.SLEEP_SESSION)
+                        result.success(hasPermission)
+                    } catch (e: Exception) {
+                        result.error("HEALTH_STORE_ERROR", e.message, null)
                     }
                 }
                 else -> {

@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    id("kotlin-parcelize")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
@@ -47,8 +48,14 @@ dependencies {
     // Samsung Health Data AAR
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
     
-    // Samsung Health SDK dependencies (if needed)
+    // Samsung Health SDK dependencies
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+    
+    // Gson for Samsung Health SDK
+    implementation("com.google.code.gson:gson:2.10.1")
+    
+    // Kotlin parcelize for Samsung Health SDK
+    implementation("org.jetbrains.kotlin:kotlin-parcelize-runtime:1.9.10")
 }
 
 
