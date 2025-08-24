@@ -321,28 +321,38 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   }
 
   Widget _buildActivityShortcutsCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const WorkoutStartPage(),
           ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildActivityShortcut(Icons.directions_walk, '걷기', Colors.green),
-          _buildActivityShortcut(Icons.pool, '풀 수영', Colors.blue),
-          _buildActivityShortcut(Icons.directions_run, '달리기', Colors.orange),
-          _buildActivityShortcut(Icons.more_horiz, '더보기', Colors.grey),
-        ],
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildActivityShortcut(Icons.directions_walk, '걷기', Colors.green),
+            _buildActivityShortcut(Icons.pool, '풀 수영', Colors.blue),
+            _buildActivityShortcut(Icons.directions_run, '달리기', Colors.orange),
+            _buildActivityShortcut(Icons.more_horiz, '더보기', Colors.grey),
+          ],
+        ),
       ),
     );
   }
@@ -2005,6 +2015,437 @@ class _SleepDetailPageState extends State<SleepDetailPage> {
           content,
         ],
       ),
+    );
+  }
+}
+
+class WorkoutStartPage extends StatefulWidget {
+  const WorkoutStartPage({super.key});
+
+  @override
+  State<WorkoutStartPage> createState() => _WorkoutStartPageState();
+}
+
+class _WorkoutStartPageState extends State<WorkoutStartPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          '운동 시작',
+          style: GoogleFonts.notoSans(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.black),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildWorkoutCategories(),
+            const SizedBox(height: 24),
+            _buildPopularWorkouts(),
+            const SizedBox(height: 24),
+            _buildRecentWorkouts(),
+            const SizedBox(height: 24),
+            _buildWorkoutGoals(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWorkoutCategories() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '운동 카테고리',
+          style: GoogleFonts.notoSans(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 16),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 1.2,
+          children: [
+            _buildCategoryCard('걷기', Icons.directions_walk, Colors.green, '8,000걸음'),
+            _buildCategoryCard('달리기', Icons.directions_run, Colors.orange, '5km'),
+            _buildCategoryCard('자전거', Icons.directions_bike, Colors.blue, '20km'),
+            _buildCategoryCard('수영', Icons.pool, Colors.cyan, '1km'),
+            _buildCategoryCard('요가', Icons.self_improvement, Colors.purple, '30분'),
+            _buildCategoryCard('헬스', Icons.fitness_center, Colors.red, '45분'),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategoryCard(String title, IconData icon, Color color, String goal) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color, size: 30),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            title,
+            style: GoogleFonts.notoSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            goal,
+            style: GoogleFonts.notoSans(
+              fontSize: 12,
+              color: Colors.grey[600],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPopularWorkouts() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '인기 운동',
+          style: GoogleFonts.notoSans(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 16),
+        _buildWorkoutCard('빠른 걷기', '30분', '150kcal', Icons.directions_walk, Colors.green),
+        const SizedBox(height: 12),
+        _buildWorkoutCard('조깅', '45분', '300kcal', Icons.directions_run, Colors.orange),
+        const SizedBox(height: 12),
+        _buildWorkoutCard('자전거 타기', '60분', '400kcal', Icons.directions_bike, Colors.blue),
+      ],
+    );
+  }
+
+  Widget _buildWorkoutCard(String title, String duration, String calories, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: color, size: 24),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.notoSans(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Icon(Icons.access_time, size: 14, color: Colors.grey[600]),
+                    const SizedBox(width: 4),
+                    Text(
+                      duration,
+                      style: GoogleFonts.notoSans(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Icon(Icons.local_fire_department, size: 14, color: Colors.grey[600]),
+                    const SizedBox(width: 4),
+                    Text(
+                      calories,
+                      style: GoogleFonts.notoSans(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Icon(Icons.play_arrow, color: Colors.white, size: 20),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecentWorkouts() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '최근 운동',
+          style: GoogleFonts.notoSans(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 16),
+        _buildRecentWorkoutCard('걷기', '오늘 08:30', '7,234걸음', '45분', Icons.directions_walk, Colors.green),
+        const SizedBox(height: 12),
+        _buildRecentWorkoutCard('조깅', '어제 18:15', '5.2km', '32분', Icons.directions_run, Colors.orange),
+      ],
+    );
+  }
+
+  Widget _buildRecentWorkoutCard(String title, String time, String distance, String duration, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: color, size: 24),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.notoSans(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  time,
+                  style: GoogleFonts.notoSans(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text(
+                      distance,
+                      style: GoogleFonts.notoSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: color,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Text(
+                      duration,
+                      style: GoogleFonts.notoSans(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Icon(Icons.chevron_right, color: Colors.grey[400]),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWorkoutGoals() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '이번 주 목표',
+          style: GoogleFonts.notoSans(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '운동 시간',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  Text(
+                    '3/5일',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.green,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              LinearPercentIndicator(
+                width: double.infinity,
+                lineHeight: 8,
+                percent: 0.6,
+                backgroundColor: Colors.grey[300],
+                progressColor: Colors.green,
+                barRadius: const Radius.circular(4),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '총 운동 시간',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  Text(
+                    '2시간 15분',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              LinearPercentIndicator(
+                width: double.infinity,
+                lineHeight: 8,
+                percent: 0.45,
+                backgroundColor: Colors.grey[300],
+                progressColor: Colors.blue,
+                barRadius: const Radius.circular(4),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
