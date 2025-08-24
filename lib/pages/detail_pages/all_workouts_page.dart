@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'workout_start_page.dart';
 
 class AllWorkoutsPage extends StatefulWidget {
   const AllWorkoutsPage({super.key});
@@ -228,41 +229,55 @@ class _AllWorkoutsPageState extends State<AllWorkoutsPage> {
     
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              workout['icon'],
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              workout['name'],
-              style: GoogleFonts.notoSans(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
+      child: InkWell(
+        onTap: () {
+          // 운동 시작 페이지로 이동
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WorkoutStartPage(
+                workoutName: workout['name'],
               ),
             ),
-          ),
-          IconButton(
-            onPressed: () => _toggleFavorite(workout['name']),
-            icon: Icon(
-              isFavorite ? Icons.star : Icons.star_border,
-              color: isFavorite ? Colors.amber : Colors.grey[400],
-              size: 24,
+          );
+        },
+        borderRadius: BorderRadius.circular(8),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                workout['icon'],
+                color: Colors.white,
+                size: 20,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                workout['name'],
+                style: GoogleFonts.notoSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+            IconButton(
+              onPressed: () => _toggleFavorite(workout['name']),
+              icon: Icon(
+                isFavorite ? Icons.star : Icons.star_border,
+                color: isFavorite ? Colors.amber : Colors.grey[400],
+                size: 24,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

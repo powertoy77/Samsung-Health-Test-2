@@ -446,7 +446,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const WorkoutStartPage(),
+            builder: (context) => const AllWorkoutsPage(),
           ),
         );
       },
