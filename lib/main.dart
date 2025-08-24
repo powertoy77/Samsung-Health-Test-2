@@ -59,6 +59,53 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
       }
     }
   }
+  
+  Future<void> _connectHealthStore() async {
+    try {
+      await _channel.invokeMethod('connectHealthStore');
+    } on PlatformException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('HealthStore 연결 중 오류: ${e.message}'),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+  }
+  
+  Future<void> _disconnectHealthStore() async {
+    try {
+      await _channel.invokeMethod('disconnectHealthStore');
+    } on PlatformException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('HealthStore 연결 해제 중 오류: ${e.message}'),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+  }
+  
+  Future<bool> _isHealthStoreConnected() async {
+    try {
+      final result = await _channel.invokeMethod('isHealthStoreConnected');
+      return result as bool;
+    } on PlatformException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('HealthStore 상태 확인 중 오류: ${e.message}'),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

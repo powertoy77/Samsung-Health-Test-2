@@ -8,6 +8,7 @@ import android.widget.Toast
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import android.util.Log
 
 class MainActivity : FlutterActivity() {
     
@@ -15,7 +16,10 @@ class MainActivity : FlutterActivity() {
         private const val SAMSUNG_HEALTH_PACKAGE = "com.sec.android.app.health"
         private const val MIN_SAMSUNG_HEALTH_VERSION = 6.25f
         private const val CHANNEL = "samsung_health_check"
+        private const val TAG = "MainActivity"
     }
+    
+    private lateinit var healthStoreManager: HealthStoreManager
     
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -30,6 +34,41 @@ class MainActivity : FlutterActivity() {
                         result.error("SAMSUNG_HEALTH_ERROR", e.message, null)
                     }
                 }
+                "connectHealthStore" -> {
+                    try {
+                        healthStoreManager.connect(this)
+                        result.success("HealthStore 연결 시도")
+                    } catch (e: Exception) {
+                        result.error("HEALTH_STORE_ERROR", e.message, null)
+                    }
+                }
+                "disconnectHealthStore" -> {
+                    try {
+                        healthStoreManager.disconnect()
+                        result.success("HealthStore 연결 해제")
+                    } catch (e: Exception) {
+                        result.error("HEALTH_STORE_ERROR", e.message, null)
+                    }
+                }
+                "isHealthStoreConnected" -> {
+                    result.success(healthStoreManager.isConnected())
+                }
+                "getHealthStoreResolver" -> {
+                    val resolver = healthStoreManager.resolver()
+                    if (resolver != null) {
+                        result.success("HealthStore Resolver 사용 가능")
+                    } else {
+                        result.error("HEALTH_STORE_ERROR", "HealthStore가 연결되지 않았습니다", null)
+                    }
+                }
+                "getHealthStorePermissionManager" -> {
+                    val permissionManager = healthStoreManager.permissionManager()
+                    if (permissionManager != null) {
+                        result.success("HealthStore PermissionManager 사용 가능")
+                    } else {
+                        result.error("HEALTH_STORE_ERROR", "HealthStore가 연결되지 않았습니다", null)
+                    }
+                }
                 else -> {
                     result.notImplemented()
                 }
@@ -39,6 +78,25 @@ class MainActivity : FlutterActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // HealthStoreManager 초기화
+        healthStoreManager = HealthStoreManager.getInstance(this)
+        
+        // 연결 콜백 설정
+        healthStoreManager.setConnectionCallback(object : HealthStoreManager.ConnectionCallback {
+            override fun onConnected() {
+                Log.d(TAG, "HealthStoreManager 연결 성공")
+            }
+            
+            override fun onDisconnected() {
+                Log.d(TAG, "HealthStoreManager 연결 해제")
+            }
+            
+            override fun onError(error: String) {
+                Log.e(TAG, "HealthStoreManager 오류: $error")
+            }
+        })
+        
         checkSamsungHealthAvailability()
     }
     
@@ -53,6 +111,13 @@ class MainActivity : FlutterActivity() {
                 showSamsungHealthUpdateDialog()
             } else {
                 println("Samsung Health 확인 완료: 버전 $versionName")
+                
+                // Samsung Health SDK 연결 시도
+                try {
+                    healthStoreManager.connect(this)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Samsung Health SDK 연결 실패: ${e.message}")
+                }
             }
             
         } catch (e: PackageManager.NameNotFoundException) {
