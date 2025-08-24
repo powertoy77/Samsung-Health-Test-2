@@ -6,6 +6,19 @@
 
 이 프로젝트는 삼성 헬스 앱의 메인 화면을 Flutter로 구현한 것입니다. 실제 삼성 헬스 앱과 동일한 디자인과 레이아웃을 제공합니다.
 
+## 🚀 바로 시작하기
+
+### 📲 APK 다운로드
+**Android 기기에서 바로 설치하세요!**
+
+[📥 Samsung Health Clone APK 다운로드](samsung-health-clone.apk)
+
+> **설치 방법:**
+> 1. 위 링크를 클릭하여 APK 파일을 다운로드
+> 2. Android 기기에서 "알 수 없는 소스" 설치 허용
+> 3. 다운로드된 APK 파일을 탭하여 설치
+> 4. 앱 실행 및 사용
+
 ## ✨ 주요 기능
 
 ### 🏠 메인 화면 구성
@@ -46,8 +59,8 @@
 
 1. 저장소 클론
 ```bash
-git clone https://github.com/your-username/samsung-health-clone.git
-cd samsung-health-clone
+git clone https://github.com/powertoy77/Samsung-Health-Test-2.git
+cd Samsung-Health-Test-2
 ```
 
 2. 의존성 설치
@@ -60,6 +73,11 @@ flutter pub get
 flutter run
 ```
 
+### APK 빌드
+```bash
+flutter build apk --release
+```
+
 ## 📁 프로젝트 구조
 
 ```
@@ -70,6 +88,7 @@ samsung_health_clone/
 ├── ios/                      # iOS 플랫폼 설정
 ├── web/                      # Web 플랫폼 설정
 ├── pubspec.yaml              # 프로젝트 의존성
+├── samsung-health-clone.apk  # Android APK 파일
 └── README.md                 # 프로젝트 문서
 ```
 
@@ -100,7 +119,7 @@ flutter doctor
 
 ## 📱 지원 플랫폼
 
-- ✅ Android
+- ✅ Android (APK 제공)
 - ✅ iOS
 - ✅ Web
 - ✅ Windows (예정)
