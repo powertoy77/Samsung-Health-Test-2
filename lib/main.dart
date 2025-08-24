@@ -221,74 +221,84 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   }
 
   Widget _buildSleepScoreCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SleepDetailPage(),
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    '78',
-                    style: GoogleFonts.notoSans(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.purple[100],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      '좋음',
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      '78',
                       style: GoogleFonts.notoSans(
-                        fontSize: 12,
-                        color: Colors.purple[700],
-                        fontWeight: FontWeight.w500,
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Text(
-                '수면 점수',
-                style: GoogleFonts.notoSans(
-                  fontSize: 14,
-                  color: Colors.grey[600],
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.purple[100],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        '좋음',
+                        style: GoogleFonts.notoSans(
+                          fontSize: 12,
+                          color: Colors.purple[700],
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-          const Spacer(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              _buildSleepItem(Icons.bed, '오전 1:47'),
-              const SizedBox(height: 4),
-              _buildSleepItem(Icons.alarm, '오전 9:20'),
-              const SizedBox(height: 4),
-              _buildSleepItem(Icons.bed, '7시간 33분'),
-            ],
-          ),
-        ],
+                const SizedBox(height: 4),
+                Text(
+                  '수면 점수',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _buildSleepItem(Icons.bed, '오전 1:47'),
+                const SizedBox(height: 4),
+                _buildSleepItem(Icons.alarm, '오전 9:20'),
+                const SizedBox(height: 4),
+                _buildSleepItem(Icons.bed, '7시간 33분'),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1208,5 +1218,793 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
         selectedDate = picked;
       });
     }
+  }
+}
+
+class SleepDetailPage extends StatefulWidget {
+  const SleepDetailPage({super.key});
+
+  @override
+  State<SleepDetailPage> createState() => _SleepDetailPageState();
+}
+
+class _SleepDetailPageState extends State<SleepDetailPage> {
+  DateTime selectedDate = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          '수면',
+          style: GoogleFonts.notoSans(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share, color: Colors.black),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.more_vert, color: Colors.black),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            _buildWeeklySleepChart(),
+            const SizedBox(height: 16),
+            _buildSleepTimeCard(),
+            const SizedBox(height: 16),
+            _buildSleepScoreCard(),
+            const SizedBox(height: 16),
+            _buildSleepStagesCard(),
+            const SizedBox(height: 16),
+            _buildBloodOxygenCard(),
+            const SizedBox(height: 16),
+            _buildSnoringCard(),
+            const SizedBox(height: 16),
+            _buildSkinTemperatureCard(),
+            const SizedBox(height: 16),
+            _buildHeartRateCard(),
+            const SizedBox(height: 16),
+            _buildRespirationRateCard(),
+            const SizedBox(height: 16),
+            _buildSleepRegularityCard(),
+            const SizedBox(height: 16),
+            _buildSleepCoachingCard(),
+            const SizedBox(height: 16),
+            _buildRelatedContentCard(),
+            const SizedBox(height: 16),
+            _buildAddSleepRecordButton(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWeeklySleepChart() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '주간 수면 시간',
+            style: GoogleFonts.notoSans(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildWeekDay('17', 7.5, false),
+              _buildWeekDay('18', 6.8, false),
+              _buildWeekDay('19', 8.2, false),
+              _buildWeekDay('20', 7.0, false),
+              _buildWeekDay('21', 6.5, false),
+              _buildWeekDay('22', 7.8, false),
+              _buildWeekDay('23', 7.6, true), // 현재 선택된 날짜
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWeekDay(String day, double hours, bool isSelected) {
+    final maxHours = 10.0;
+    final height = 80.0;
+    final barHeight = (hours / maxHours) * height;
+    
+    return Column(
+      children: [
+        Text(
+          day,
+          style: GoogleFonts.notoSans(
+            fontSize: 12,
+            color: isSelected ? Colors.blue : Colors.grey[600],
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          width: 20,
+          height: height,
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                width: 20,
+                height: barHeight,
+                decoration: BoxDecoration(
+                  color: isSelected ? Colors.blue : Colors.grey[400],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '${hours.toStringAsFixed(1)}h',
+          style: GoogleFonts.notoSans(
+            fontSize: 10,
+            color: Colors.grey[600],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSleepTimeCard() {
+    return _buildDetailCard(
+      '수면 시간',
+      Icons.bed,
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.bed, size: 40, color: Colors.blue),
+              const SizedBox(width: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '7시간 33분',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '오전 1:47 - 오전 9:20',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '실제 수면 시간 6시간 24분',
+            style: GoogleFonts.notoSans(
+              fontSize: 14,
+              color: Colors.grey[600],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSleepScoreCard() {
+    return _buildDetailCard(
+      '수면 점수',
+      Icons.favorite,
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.green[100],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  '좋음',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 14,
+                    color: Colors.green[700],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              Text(
+                '78.13',
+                style: GoogleFonts.notoSans(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green[700],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(Icons.favorite, size: 30, color: Colors.green),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            '수면 점수에 영향을 주는 요인',
+            style: GoogleFonts.notoSans(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _buildSleepFactor('실제 수면 시간', 0.8, '좋음'),
+          const SizedBox(height: 8),
+          _buildSleepFactor('깊은 수면', 0.85, '좋음'),
+          const SizedBox(height: 8),
+          _buildSleepFactor('렘 수면', 0.75, '좋음'),
+          const SizedBox(height: 8),
+          _buildSleepFactor('숙면 정도', 0.6, '관심 필요'),
+          const SizedBox(height: 8),
+          _buildSleepFactor('잠들기까지 걸린 시간', 0.9, '매우 좋음'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSleepFactor(String label, double progress, String status) {
+    Color statusColor = Colors.green;
+    if (status == '관심 필요') statusColor = Colors.orange;
+    if (status == '매우 좋음') statusColor = Colors.blue;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.notoSans(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: statusColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                status,
+                style: GoogleFonts.notoSans(
+                  fontSize: 12,
+                  color: statusColor,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        LinearPercentIndicator(
+          width: MediaQuery.of(context).size.width - 64,
+          lineHeight: 6,
+          percent: progress,
+          backgroundColor: Colors.grey[200]!,
+          progressColor: statusColor,
+          barRadius: const Radius.circular(3),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSleepStagesCard() {
+    return _buildDetailCard(
+      '수면 단계',
+      Icons.timeline,
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 25,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        bottomLeft: Radius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 33,
+                  child: Container(color: Colors.lightBlue),
+                ),
+                Expanded(
+                  flex: 39,
+                  child: Container(color: Colors.blue),
+                ),
+                Expanded(
+                  flex: 16,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.indigo,
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(8),
+                        bottomRight: Radius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildSleepStage('각성', '25%', '1시간 9분', Colors.orange),
+              _buildSleepStage('얕은 수면', '33%', '2시간 17분', Colors.lightBlue),
+              _buildSleepStage('깊은 수면', '39%', '2시간 50분', Colors.blue),
+              _buildSleepStage('렘 수면', '16%', '1시간 17분', Colors.indigo),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSleepStage(String label, String percentage, String duration, Color color) {
+    return Column(
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: GoogleFonts.notoSans(
+            fontSize: 10,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Text(
+          percentage,
+          style: GoogleFonts.notoSans(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          duration,
+          style: GoogleFonts.notoSans(
+            fontSize: 10,
+            color: Colors.grey[600],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBloodOxygenCard() {
+    return _buildDetailCard(
+      '수면 중 혈중 산소',
+      Icons.air,
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 100,
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                '혈중 산소 그래프',
+                style: GoogleFonts.notoSans(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '- 90% 미만: 3분 56초',
+            style: GoogleFonts.notoSans(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '정확한 측정을 위해 자는 동안 웨어러블 기기를 꼭 맞게 착용했는지 확인하세요.',
+            style: GoogleFonts.notoSans(
+              fontSize: 12,
+              color: Colors.grey[600],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSnoringCard() {
+    return _buildDetailCard(
+      '코골이',
+      Icons.mic,
+      Text(
+        '수면 중 휴대전화가 충전되지 않아 코골이 기능이 동작하지 않았습니다.',
+        style: GoogleFonts.notoSans(
+          fontSize: 14,
+          color: Colors.grey[600],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSkinTemperatureCard() {
+    return _buildDetailCard(
+      '수면 중 피부 온도',
+      Icons.thermostat,
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '-0.7에서 +1.1 °C',
+            style: GoogleFonts.notoSans(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            '최근 평균 대비 변화',
+            style: GoogleFonts.notoSans(
+              fontSize: 14,
+              color: Colors.grey[600],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            height: 80,
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                '피부 온도 그래프',
+                style: GoogleFonts.notoSans(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeartRateCard() {
+    return _buildDetailCard(
+      '심박수',
+      Icons.favorite,
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '평균 심박수 58 bpm',
+            style: GoogleFonts.notoSans(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            height: 80,
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                '심박수 그래프',
+                style: GoogleFonts.notoSans(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRespirationRateCard() {
+    return _buildDetailCard(
+      '호흡수',
+      Icons.air,
+      Text(
+        '평균 호흡수 9.6 회/분',
+        style: GoogleFonts.notoSans(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSleepRegularityCard() {
+    return _buildDetailCard(
+      '수면 규칙성',
+      Icons.calendar_today,
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '7일 중 0일 목표 달성함',
+            style: GoogleFonts.notoSans(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildRegularityDay('18', true, false),
+              _buildRegularityDay('19', false, true),
+              _buildRegularityDay('20', false, true),
+              _buildRegularityDay('21', false, true),
+              _buildRegularityDay('22', false, false),
+              _buildRegularityDay('23', false, false),
+              _buildRegularityDay('24', false, false),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRegularityDay(String day, bool sleepGoal, bool wakeGoal) {
+    return Column(
+      children: [
+        Text(
+          day,
+          style: GoogleFonts.notoSans(
+            fontSize: 12,
+            color: Colors.grey[600],
+          ),
+        ),
+        const SizedBox(height: 4),
+        Icon(
+          Icons.bed,
+          size: 16,
+          color: sleepGoal ? Colors.blue : Colors.grey[300],
+        ),
+        const SizedBox(height: 4),
+        Icon(
+          Icons.alarm,
+          size: 16,
+          color: wakeGoal ? Colors.blue : Colors.grey[300],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSleepCoachingCard() {
+    return _buildDetailCard(
+      '수면 코칭',
+      Icons.pets,
+      Row(
+        children: [
+          Icon(Icons.pets, size: 40, color: Colors.orange),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '수면 코칭을 다시 진행할까요?',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '원한다면 언제든 다시 시작할 수 있습니다.',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRelatedContentCard() {
+    return _buildDetailCard(
+      '연관 콘텐츠',
+      Icons.video_library,
+      Column(
+        children: [
+          _buildContentItem('7일간의 행복 CALM', 'CALM'),
+          const SizedBox(height: 8),
+          _buildContentItem('초보자용 전신 스트레칭 BLESSLIFE', 'BLESSLIFE'),
+          const SizedBox(height: 8),
+          _buildContentItem('기상후 스트레칭 BLESSLIFE', 'BLESSLIFE'),
+          const SizedBox(height: 8),
+          _buildContentItem('전신 BLESS', 'BLESS'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContentItem(String title, String source) {
+    return Row(
+      children: [
+        Container(
+          width: 60,
+          height: 40,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: Icon(Icons.play_arrow, color: Colors.grey[600]),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: GoogleFonts.notoSans(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Text(
+                source,
+                style: GoogleFonts.notoSans(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAddSleepRecordButton() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Text(
+          '수면 기록 추가',
+          style: GoogleFonts.notoSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailCard(String title, IconData icon, Widget content) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                title,
+                style: GoogleFonts.notoSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              Icon(Icons.chevron_right, color: Colors.grey[400]),
+            ],
+          ),
+          const SizedBox(height: 16),
+          content,
+        ],
+      ),
+    );
   }
 }
