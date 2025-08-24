@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class BingoPage extends StatelessWidget {
+class BingoPage extends StatefulWidget {
   final List<int> bingoNumbers;
   final List<bool> bingoSelected;
 
@@ -9,6 +9,65 @@ class BingoPage extends StatelessWidget {
     required this.bingoNumbers,
     required this.bingoSelected,
   });
+
+  @override
+  State<BingoPage> createState() => _BingoPageState();
+}
+
+class _BingoPageState extends State<BingoPage> with TickerProviderStateMixin {
+  late AnimationController _stampAnimationController;
+  late Animation<double> _stampScaleAnimation;
+  late Animation<double> _stampOpacityAnimation;
+  int? _animatedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _stampAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    
+    _stampScaleAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _stampAnimationController,
+      curve: Curves.elasticOut,
+    ));
+    
+    _stampOpacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _stampAnimationController,
+      curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
+    ));
+    
+    // 페이지 로드 시 선택된 번호들에 대해 애니메이션 실행
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _animateSelectedNumbers();
+    });
+  }
+
+  @override
+  void dispose() {
+    _stampAnimationController.dispose();
+    super.dispose();
+  }
+
+  void _animateSelectedNumbers() async {
+    for (int i = 0; i < widget.bingoSelected.length; i++) {
+      if (widget.bingoSelected[i]) {
+        setState(() {
+          _animatedIndex = i;
+        });
+        _stampAnimationController.reset();
+        _stampAnimationController.forward();
+        await Future.delayed(const Duration(milliseconds: 200));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +148,9 @@ class BingoPage extends StatelessWidget {
                       ),
                       itemCount: 25,
                       itemBuilder: (context, index) {
-                        final number = bingoNumbers[index];
-                        final isSelected = bingoSelected[index];
+                        final number = widget.bingoNumbers[index];
+                        final isSelected = widget.bingoSelected[index];
+                        final isAnimating = _animatedIndex == index;
                         
                         return Container(
                           decoration: BoxDecoration(
@@ -127,16 +187,31 @@ class BingoPage extends StatelessWidget {
                                   ),
                                 ),
                                 if (isSelected)
-                                  Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: Colors.white,
-                                        width: 3,
-                                      ),
-                                    ),
+                                  AnimatedBuilder(
+                                    animation: _stampAnimationController,
+                                    builder: (context, child) {
+                                      return Opacity(
+                                        opacity: isAnimating 
+                                          ? _stampOpacityAnimation.value 
+                                          : 1.0,
+                                        child: Transform.scale(
+                                          scale: isAnimating 
+                                            ? _stampScaleAnimation.value 
+                                            : 1.0,
+                                          child: Container(
+                                            width: 40,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: Colors.white,
+                                                width: 3,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                               ],
                             ),
@@ -152,7 +227,11 @@ class BingoPage extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/',
+                        (route) => false,
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF4CAF50),

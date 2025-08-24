@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../services/bingo_service.dart';
+import '../../widgets/bingo_page.dart';
+import '../../widgets/fireworks_animation.dart';
 
 class DailyActivityDetailPage extends StatefulWidget {
   const DailyActivityDetailPage({super.key});
@@ -12,6 +15,282 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
   int selectedDayIndex = 0;
   final List<String> weekDays = ['일', '월', '화', '수', '목', '금', '토'];
   final List<String> dates = ['24', '25', '26', '27', '28', '29', '30'];
+  
+  // Bingo service
+  final BingoService _bingoService = BingoService();
+  
+  @override
+  void initState() {
+    super.initState();
+    // 페이지 로드 후 자동으로 명언 팝업 표시
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showMotivationalQuoteDialog();
+    });
+  }
+  
+  // 랜덤 명언을 가져오는 메서드
+  Map<String, String> _getRandomQuote() {
+    return _bingoService.getRandomQuote();
+  }
+  
+  // 명언 팝업을 표시하는 메서드
+  void _showMotivationalQuoteDialog() {
+    final quote = _getRandomQuote();
+    final quoteNumber = int.parse(quote['number']!);
+    
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF4CAF50), Color(0xFF2E7D32)],
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 명언 번호
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    "명언 #${quote['number']}",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // 명언 내용
+                Text(
+                  quote['quote']!,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    height: 1.4,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 30),
+                // 빙고판 확인하기 버튼
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      _checkBingoAndNavigate(quoteNumber);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xFF4CAF50),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      '빙고판 확인하기',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // 닫기 버튼
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    '닫기',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+  
+  // 빙고 확인 및 네비게이션
+  void _checkBingoAndNavigate(int quoteNumber) {
+    final result = _bingoService.checkBingoAndNavigate(quoteNumber);
+    
+    if (result.isBingoCompleted) {
+      _showBingoCompletionDialog();
+    } else if (result.isNumberFound) {
+      _navigateToBingoPage();
+    } else {
+      _showNoBingoDialog();
+    }
+  }
+  
+  // 빙고 완성 축하 다이얼로그
+  void _showBingoCompletionDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.celebration,
+                  size: 60,
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  '축하합니다~!',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  '드디어 빙고가 완성되었습니다.',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 30),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      _bingoService.generateNewBingoBoard();
+                      _showFireworksAnimation();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xFFFFA500),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      '새로운 빙고 시작하기',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+  
+  // 빙고판에 없는 번호 다이얼로그
+  void _showNoBingoDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            '아쉽습니다',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: const Text(
+            '다음 기회에',
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+  
+  // 빙고판 페이지로 이동 (홈 화면으로 돌아가기)
+  void _navigateToBingoPage() {
+    final bingoData = _bingoService.getBingoData();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BingoPage(
+          bingoNumbers: bingoData.bingoNumbers,
+          bingoSelected: bingoData.bingoSelected,
+        ),
+      ),
+      (route) => false, // 모든 이전 페이지 제거하고 홈으로 이동
+    );
+  }
+  
+  // 폭죽 애니메이션 표시
+  void _showFireworksAnimation() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return FireworksAnimation(
+          onComplete: () {
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
