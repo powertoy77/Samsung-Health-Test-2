@@ -651,67 +651,77 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   }
 
   Widget _buildStepsGoalCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const StepsDetailPage(),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                '713',
-                style: GoogleFonts.notoSans(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                '/6,000 걸음',
-                style: GoogleFonts.notoSans(
-                  fontSize: 16,
-                  color: Colors.grey[600],
-                ),
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.green[100],
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  '11%',
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  '713',
                   style: GoogleFonts.notoSans(
-                    fontSize: 12,
-                    color: Colors.green[700],
-                    fontWeight: FontWeight.w500,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          LinearPercentIndicator(
-            width: MediaQuery.of(context).size.width - 64,
-            lineHeight: 8,
-            percent: 0.11,
-            backgroundColor: Colors.grey[300]!,
-            progressColor: Colors.green,
-            barRadius: const Radius.circular(4),
-          ),
-        ],
+                Text(
+                  '/6,000 걸음',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 16,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.green[100],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '11%',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 12,
+                      color: Colors.green[700],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            LinearPercentIndicator(
+              width: MediaQuery.of(context).size.width - 64,
+              lineHeight: 8,
+              percent: 0.11,
+              backgroundColor: Colors.grey[300]!,
+              progressColor: Colors.green,
+              barRadius: const Radius.circular(4),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -3706,6 +3716,611 @@ class _AllWorkoutsPageState extends State<AllWorkoutsPage> {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StepsDetailPage extends StatefulWidget {
+  const StepsDetailPage({super.key});
+
+  @override
+  State<StepsDetailPage> createState() => _StepsDetailPageState();
+}
+
+class _StepsDetailPageState extends State<StepsDetailPage> {
+  String selectedDate = '8/24';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          '걸음 수',
+          style: GoogleFonts.notoSans(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share, color: Colors.black),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.signal_cellular_4_bar, color: Colors.black),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.more_vert, color: Colors.black),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            _buildDateSelector(),
+            const SizedBox(height: 16),
+            _buildMainStepsCard(),
+            const SizedBox(height: 16),
+            _buildHourlyStepsChart(),
+            const SizedBox(height: 16),
+            _buildStepsComparisonCard(),
+            const SizedBox(height: 16),
+            _buildBadgesCard(),
+            const SizedBox(height: 16),
+            _buildRelatedContent(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDateSelector() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _buildDateItem('18', false),
+                  _buildDateItem('19', false),
+                  _buildDateItem('20', false),
+                  _buildDateItem('21', false),
+                  _buildDateItem('22', false),
+                  _buildDateItem('23', false),
+                  _buildDateItem('8/24', true), // selected
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Text(
+            '6,000',
+            style: GoogleFonts.notoSans(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.green,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDateItem(String date, bool isSelected) {
+    return Container(
+      margin: const EdgeInsets.only(right: 16),
+      child: Column(
+        children: [
+          Container(
+            width: 4,
+            height: 20,
+            decoration: BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: isSelected ? Colors.white : Colors.transparent,
+              shape: BoxShape.circle,
+              border: isSelected ? Border.all(color: Colors.grey[300]!, width: 1) : null,
+            ),
+            child: Column(
+              children: [
+                Text(
+                  date,
+                  style: GoogleFonts.notoSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: isSelected ? Colors.black : Colors.grey[600],
+                  ),
+                ),
+                if (isSelected) ...[
+                  const SizedBox(height: 2),
+                  Container(
+                    width: 4,
+                    height: 4,
+                    decoration: const BoxDecoration(
+                      color: Colors.grey,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMainStepsCard() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                '2,073',
+                style: GoogleFonts.notoSans(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '걸음',
+                style: GoogleFonts.notoSans(
+                  fontSize: 18,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          LinearPercentIndicator(
+            width: double.infinity,
+            lineHeight: 12,
+            percent: 2073 / 6000,
+            backgroundColor: Colors.grey[300]!,
+            progressColor: Colors.green,
+            barRadius: const Radius.circular(6),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                '목표: 6,000',
+                style: GoogleFonts.notoSans(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildMetricItem('1.63 km', '거리'),
+              _buildMetricItem('83 kcal', '칼로리'),
+              _buildMetricItem('0층', '층수'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMetricItem(String value, String label) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: GoogleFonts.notoSans(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: GoogleFonts.notoSans(
+            fontSize: 12,
+            color: Colors.grey[600],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHourlyStepsChart() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '시간별 걸음 수',
+            style: GoogleFonts.notoSans(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 120,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _buildHourlyBar(20, '오전 12'),
+                _buildHourlyBar(10, '오전 6'),
+                _buildHourlyBar(80, '오후 12'),
+                _buildHourlyBar(40, '오후 6'),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Center(
+            child: Text(
+              '(시)',
+              style: GoogleFonts.notoSans(
+                fontSize: 12,
+                color: Colors.grey[600],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHourlyBar(double height, String time) {
+    return Column(
+      children: [
+        Container(
+          width: 30,
+          height: height,
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          time,
+          style: GoogleFonts.notoSans(
+            fontSize: 12,
+            color: Colors.grey[600],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStepsComparisonCard() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '걸음 수 비교',
+            style: GoogleFonts.notoSans(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '평균 10,833',
+            style: GoogleFonts.notoSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '상위 8%',
+            style: GoogleFonts.notoSans(
+              fontSize: 14,
+              color: Colors.green,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 20),
+          _buildComparisonBar('나', 0.35, Colors.green),
+          const SizedBox(height: 12),
+          _buildComparisonBar('40-49', 0.25, Colors.grey[400]!),
+          const SizedBox(height: 12),
+          _buildComparisonBar('전체', 0.20, Colors.grey[400]!),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildComparisonBar(String label, double percent, Color color) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 40,
+          child: Text(
+            label,
+            style: GoogleFonts.notoSans(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: LinearPercentIndicator(
+            width: double.infinity,
+            lineHeight: 8,
+            percent: percent,
+            backgroundColor: Colors.grey[200]!,
+            progressColor: color,
+            barRadius: const Radius.circular(4),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBadgesCard() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '배지 현황',
+            style: GoogleFonts.notoSans(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '7일째 목표를 달성했어요. 잘하고 있어요!',
+            style: GoogleFonts.notoSans(
+              fontSize: 14,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(10, (index) {
+                    bool isAchieved = index < 7;
+                    return Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: isAchieved ? Colors.yellow : Colors.grey[300],
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: isAchieved
+                            ? const Icon(Icons.check, color: Colors.white, size: 16)
+                            : Text(
+                                '${index + 1}',
+                                style: GoogleFonts.notoSans(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.directions_walk,
+                  color: Colors.grey,
+                  size: 20,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRelatedContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '연관 콘텐츠',
+          style: GoogleFonts.notoSans(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 200,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              _buildContentCard('Prelude', 'CALM', 'assets/mountain.jpg'),
+              _buildContentCard('Veering', 'CALM', 'assets/coastline.jpg'),
+              _buildContentCard('군살을 빼자. 라인을 살리...', 'Skimble', 'assets/running.jpg'),
+              _buildContentCard('초보기', '스트리', 'assets/yoga.jpg'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContentCard(String title, String subtitle, String imagePath) {
+    return Container(
+      width: 160,
+      margin: const EdgeInsets.only(right: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 120,
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Center(
+              child: Icon(
+                Icons.image,
+                size: 40,
+                color: Colors.grey[400],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.notoSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: GoogleFonts.notoSans(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
