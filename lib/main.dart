@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -32,6 +33,32 @@ class SamsungHealthHomePage extends StatefulWidget {
 
 class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   int _selectedIndex = 0;
+  
+  // MethodChannel for Samsung Health check
+  static const MethodChannel _channel = MethodChannel('samsung_health_check');
+  
+  @override
+  void initState() {
+    super.initState();
+    // 앱 시작 시 Samsung Health 확인
+    _checkSamsungHealth();
+  }
+  
+  Future<void> _checkSamsungHealth() async {
+    try {
+      await _channel.invokeMethod('checkSamsungHealth');
+    } on PlatformException catch (e) {
+      // Android에서 발생한 에러를 토스트로 표시
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Samsung Health 확인 중 오류: ${e.message}'),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
