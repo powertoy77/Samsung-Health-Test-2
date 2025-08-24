@@ -4,70 +4,176 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import java.util.concurrent.TimeUnit
 
-// Samsung Health SDK 더미 클래스들 (실제 SDK 구조를 반영)
-class HealthTrackerException(message: String) : RuntimeException(message)
-
-class HealthTrackerManager private constructor(private val context: Context) {
+// Samsung Health Data SDK 클래스들 (실제 SDK 구조 반영)
+class HealthDataStore private constructor(private val context: Context) {
     companion object {
-        fun getInstance(context: Context): HealthTrackerManager {
-            return HealthTrackerManager(context)
+        private const val TAG = "HealthDataStore"
+        
+        @Volatile
+        private var INSTANCE: HealthDataStore? = null
+        
+        fun getInstance(context: Context): HealthDataStore {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: HealthDataStore(context.applicationContext).also { INSTANCE = it }
+            }
         }
     }
     
-    fun connectService(listener: ConnectionListener) {
-        Log.d("HealthTrackerManager", "더미 연결 시도")
-        // 실제로는 Samsung Health 서비스에 연결
-        listener.onConnectionResult(ConnectionListener.CONNECTION_SUCCESS)
+    private var isConnected = false
+    private var connectionListener: ConnectionListener? = null
+    
+    interface ConnectionListener {
+        fun onConnected()
+        fun onDisconnected()
+        fun onError(error: String)
     }
     
-    fun disconnectService() {
-        Log.d("HealthTrackerManager", "더미 연결 해제")
+    fun setConnectionListener(listener: ConnectionListener) {
+        this.connectionListener = listener
     }
     
-    fun getHealthTracker(type: HealthTrackerType): HealthTracker? {
-        Log.d("HealthTrackerManager", "더미 HealthTracker 반환")
-        return null // 실제로는 HealthTracker 인스턴스 반환
+    fun connect(activity: Activity) {
+        try {
+            Log.d(TAG, "Samsung Health Data Store 연결 시도...")
+            
+            // 실제 Samsung Health 서비스에 연결
+            // 여기서는 시뮬레이션
+            isConnected = true
+            Log.d(TAG, "Samsung Health Data Store 연결 성공")
+            Toast.makeText(context, "Samsung Health 연결 성공", Toast.LENGTH_SHORT).show()
+            connectionListener?.onConnected()
+            
+        } catch (e: Exception) {
+            Log.e(TAG, "Samsung Health Data Store 연결 실패: ${e.message}")
+            Toast.makeText(context, "연결 실패: ${e.message}", Toast.LENGTH_LONG).show()
+            connectionListener?.onError(e.message ?: "연결 실패")
+        }
     }
     
-    fun requestPermission(activity: Activity, permissionKey: PermissionKey) {
-        Log.d("HealthTrackerManager", "더미 권한 요청: $permissionKey")
+    fun disconnect() {
+        try {
+            Log.d(TAG, "Samsung Health Data Store 연결 해제...")
+            isConnected = false
+            Log.d(TAG, "Samsung Health Data Store 연결 해제 완료")
+            connectionListener?.onDisconnected()
+        } catch (e: Exception) {
+            Log.e(TAG, "연결 해제 실패: ${e.message}")
+        }
     }
     
-    fun hasPermission(permissionKey: PermissionKey): Boolean {
-        Log.d("HealthTrackerManager", "더미 권한 확인: $permissionKey")
-        return true // 실제로는 권한 상태 반환
+    fun isConnected(): Boolean = isConnected
+    
+    fun getDataResolver(): HealthDataResolver? {
+        return if (isConnected) HealthDataResolver() else null
+    }
+    
+    fun getPermissionManager(): HealthPermissionManager? {
+        return if (isConnected) HealthPermissionManager() else null
     }
 }
 
-interface ConnectionListener {
+class HealthDataResolver {
     companion object {
-        const val CONNECTION_SUCCESS = 0
-        const val CONNECTION_FAILURE_DISABLED_BY_USER = 1
-        const val CONNECTION_FAILURE_INVALID_PACKAGE = 2
-        const val CONNECTION_FAILURE_PLATFORM_NOT_AVAILABLE = 3
-        const val CONNECTION_FAILURE_OLD_VERSION_PLATFORM = 4
+        private const val TAG = "HealthDataResolver"
     }
     
-    fun onConnectionResult(result: Int)
-    fun onDisconnected()
+    // 걸음수 데이터 읽기
+    fun readStepCount(startTime: Long, endTime: Long): List<StepCountData> {
+        Log.d(TAG, "걸음수 데이터 읽기: $startTime ~ $endTime")
+        // 실제로는 Samsung Health에서 데이터를 읽어옴
+        return listOf(
+            StepCountData(startTime, endTime, 8500),
+            StepCountData(startTime - TimeUnit.DAYS.toMillis(1), startTime, 9200)
+        )
+    }
+    
+    // 수면 데이터 읽기
+    fun readSleepData(startTime: Long, endTime: Long): List<SleepData> {
+        Log.d(TAG, "수면 데이터 읽기: $startTime ~ $endTime")
+        // 실제로는 Samsung Health에서 데이터를 읽어옴
+        return listOf(
+            SleepData(startTime, endTime, SleepType.DEEP, 6.5f),
+            SleepData(startTime - TimeUnit.DAYS.toMillis(1), startTime, SleepType.LIGHT, 7.2f)
+        )
+    }
+    
+    // 심박수 데이터 읽기
+    fun readHeartRate(startTime: Long, endTime: Long): List<HeartRateData> {
+        Log.d(TAG, "심박수 데이터 읽기: $startTime ~ $endTime")
+        return listOf(
+            HeartRateData(startTime, 72),
+            HeartRateData(startTime + 60000, 75)
+        )
+    }
+    
+    // 체중 데이터 쓰기
+    fun writeWeight(weight: Float, timestamp: Long) {
+        Log.d(TAG, "체중 데이터 쓰기: $weight kg at $timestamp")
+        // 실제로는 Samsung Health에 데이터를 씀
+    }
 }
 
-enum class HealthTrackerType {
+class HealthPermissionManager {
+    companion object {
+        private const val TAG = "HealthPermissionManager"
+    }
+    
+    // 권한 요청
+    fun requestPermission(activity: Activity, permissionType: PermissionType) {
+        Log.d(TAG, "권한 요청: $permissionType")
+        // 실제로는 Samsung Health 권한 요청 다이얼로그 표시
+        Toast.makeText(activity, "$permissionType 권한 요청", Toast.LENGTH_SHORT).show()
+    }
+    
+    // 권한 확인
+    fun hasPermission(permissionType: PermissionType): Boolean {
+        Log.d(TAG, "권한 확인: $permissionType")
+        // 실제로는 Samsung Health 권한 상태 확인
+        return true // 시뮬레이션
+    }
+    
+    // 모든 권한 확인
+    fun hasAllPermissions(permissionTypes: List<PermissionType>): Boolean {
+        return permissionTypes.all { hasPermission(it) }
+    }
+}
+
+// 데이터 타입들
+data class StepCountData(
+    val startTime: Long,
+    val endTime: Long,
+    val stepCount: Int
+)
+
+data class SleepData(
+    val startTime: Long,
+    val endTime: Long,
+    val sleepType: SleepType,
+    val duration: Float // 시간 단위
+)
+
+data class HeartRateData(
+    val timestamp: Long,
+    val heartRate: Int
+)
+
+enum class SleepType {
+    DEEP, LIGHT, REM, AWAKE
+}
+
+enum class PermissionType {
     STEP_COUNT,
-    SLEEP_SESSION,
-    HEART_RATE
+    SLEEP,
+    HEART_RATE,
+    WEIGHT,
+    BLOOD_PRESSURE,
+    BLOOD_GLUCOSE,
+    EXERCISE
 }
 
-enum class PermissionKey {
-    STEP_COUNT,
-    SLEEP_SESSION,
-    HEART_RATE
-}
-
-class HealthTracker
-class DataPoint
-
+// 메인 HealthStoreManager 클래스
 class HealthStoreManager private constructor(private val context: Context) {
     
     companion object {
@@ -83,11 +189,8 @@ class HealthStoreManager private constructor(private val context: Context) {
         }
     }
     
-    private var healthTrackerManager: HealthTrackerManager? = null
-    private var isConnected = false
-    private var connectionListener: ConnectionListener? = null
+    private val healthDataStore = HealthDataStore.getInstance(context)
     
-    // 연결 상태 콜백
     interface ConnectionCallback {
         fun onConnected()
         fun onDisconnected()
@@ -101,160 +204,96 @@ class HealthStoreManager private constructor(private val context: Context) {
     }
     
     /**
-     * Samsung Health SDK에 연결
+     * Samsung Health Data Store에 연결
      */
     fun connect(activity: Activity) {
-        try {
-            Log.d(TAG, "Samsung Health SDK 연결 시도...")
-            
-            healthTrackerManager = HealthTrackerManager.getInstance(context)
-            
-            // ConnectionListener 생성
-            connectionListener = object : ConnectionListener {
-                override fun onConnectionResult(result: Int) {
-                    when (result) {
-                        ConnectionListener.CONNECTION_SUCCESS -> {
-                            Log.d(TAG, "Samsung Health SDK 연결 성공")
-                            isConnected = true
-                            
-                            // 토스트 메시지 표시
-                            Toast.makeText(context, "Samsung Health 연결 성공", Toast.LENGTH_SHORT).show()
-                            
-                            // 콜백 호출
-                            connectionCallback?.onConnected()
-                        }
-                        ConnectionListener.CONNECTION_FAILURE_DISABLED_BY_USER -> {
-                            Log.e(TAG, "Samsung Health 사용자에 의해 비활성화됨")
-                            isConnected = false
-                            Toast.makeText(context, "Samsung Health가 비활성화되어 있습니다", Toast.LENGTH_LONG).show()
-                            connectionCallback?.onError("Samsung Health가 비활성화되어 있습니다")
-                        }
-                        ConnectionListener.CONNECTION_FAILURE_INVALID_PACKAGE -> {
-                            Log.e(TAG, "Samsung Health 잘못된 패키지")
-                            isConnected = false
-                            Toast.makeText(context, "Samsung Health 패키지 오류", Toast.LENGTH_LONG).show()
-                            connectionCallback?.onError("Samsung Health 패키지 오류")
-                        }
-                        ConnectionListener.CONNECTION_FAILURE_PLATFORM_NOT_AVAILABLE -> {
-                            Log.e(TAG, "Samsung Health 플랫폼을 사용할 수 없습니다")
-                            isConnected = false
-                            Toast.makeText(context, "Samsung Health 플랫폼을 사용할 수 없습니다", Toast.LENGTH_LONG).show()
-                            connectionCallback?.onError("Samsung Health 플랫폼을 사용할 수 없습니다")
-                        }
-                        ConnectionListener.CONNECTION_FAILURE_OLD_VERSION_PLATFORM -> {
-                            Log.e(TAG, "Samsung Health 플랫폼 버전이 낮습니다")
-                            isConnected = false
-                            Toast.makeText(context, "Samsung Health 업데이트가 필요합니다", Toast.LENGTH_LONG).show()
-                            
-                            // 플랫폼 업데이트 처리
-                            try {
-                                healthTrackerManager?.requestPermission(activity, PermissionKey.STEP_COUNT)
-                            } catch (e: Exception) {
-                                Log.e(TAG, "플랫폼 업데이트 처리 실패: ${e.message}")
-                                Toast.makeText(context, "업데이트 처리 중 오류가 발생했습니다", Toast.LENGTH_LONG).show()
-                            }
-                            
-                            connectionCallback?.onError("Samsung Health 업데이트가 필요합니다")
-                        }
-                        else -> {
-                            Log.e(TAG, "알 수 없는 연결 오류: $result")
-                            isConnected = false
-                            Toast.makeText(context, "Samsung Health 연결 중 오류가 발생했습니다", Toast.LENGTH_LONG).show()
-                            connectionCallback?.onError("알 수 없는 연결 오류: $result")
-                        }
-                    }
-                }
-                
-                override fun onDisconnected() {
-                    Log.d(TAG, "Samsung Health SDK 연결 해제")
-                    isConnected = false
-                    
-                    // 토스트 메시지 표시
-                    Toast.makeText(context, "Samsung Health 연결 해제", Toast.LENGTH_SHORT).show()
-                    
-                    // 콜백 호출
-                    connectionCallback?.onDisconnected()
-                }
+        healthDataStore.setConnectionListener(object : HealthDataStore.ConnectionListener {
+            override fun onConnected() {
+                Log.d(TAG, "HealthStoreManager 연결 성공")
+                connectionCallback?.onConnected()
             }
             
-            // 연결 시도
-            connectionListener?.let { listener ->
-                healthTrackerManager?.connectService(listener)
+            override fun onDisconnected() {
+                Log.d(TAG, "HealthStoreManager 연결 해제")
+                connectionCallback?.onDisconnected()
             }
             
-        } catch (e: Exception) {
-            Log.e(TAG, "HealthTrackerManager 초기화 실패: ${e.message}")
-            Toast.makeText(context, "Samsung Health 초기화 실패: ${e.message}", Toast.LENGTH_LONG).show()
-            connectionCallback?.onError(e.message ?: "초기화 실패")
-        }
+            override fun onError(error: String) {
+                Log.e(TAG, "HealthStoreManager 오류: $error")
+                connectionCallback?.onError(error)
+            }
+        })
+        
+        healthDataStore.connect(activity)
     }
     
     /**
-     * Samsung Health SDK 연결 해제
+     * Samsung Health Data Store 연결 해제
      */
     fun disconnect() {
-        try {
-            Log.d(TAG, "Samsung Health SDK 연결 해제 시도...")
-            
-            healthTrackerManager?.disconnectService()
-            healthTrackerManager = null
-            connectionListener = null
-            isConnected = false
-            
-            Log.d(TAG, "Samsung Health SDK 연결 해제 완료")
-            
-        } catch (e: Exception) {
-            Log.e(TAG, "Samsung Health SDK 연결 해제 실패: ${e.message}")
-            Toast.makeText(context, "연결 해제 중 오류가 발생했습니다: ${e.message}", Toast.LENGTH_LONG).show()
-        }
-    }
-    
-    /**
-     * HealthTracker 인스턴스 반환
-     */
-    fun getHealthTracker(type: HealthTrackerType): HealthTracker? {
-        return if (isConnected) {
-            healthTrackerManager?.getHealthTracker(type)
-        } else {
-            Log.w(TAG, "Samsung Health SDK가 연결되지 않았습니다")
-            null
-        }
-    }
-    
-    /**
-     * 권한 요청
-     */
-    fun requestPermission(activity: Activity, permissionKey: PermissionKey) {
-        if (isConnected) {
-            healthTrackerManager?.requestPermission(activity, permissionKey)
-        } else {
-            Log.w(TAG, "Samsung Health SDK가 연결되지 않았습니다")
-        }
-    }
-    
-    /**
-     * 권한 확인
-     */
-    fun hasPermission(permissionKey: PermissionKey): Boolean {
-        return if (isConnected) {
-            healthTrackerManager?.hasPermission(permissionKey) ?: false
-        } else {
-            Log.w(TAG, "Samsung Health SDK가 연결되지 않았습니다")
-            false
-        }
+        healthDataStore.disconnect()
     }
     
     /**
      * 연결 상태 확인
      */
     fun isConnected(): Boolean {
-        return isConnected
+        return healthDataStore.isConnected()
     }
     
     /**
-     * HealthTrackerManager 인스턴스 반환
+     * 데이터 리졸버 반환
      */
-    fun getHealthTrackerManager(): HealthTrackerManager? {
-        return healthTrackerManager
+    fun getDataResolver(): HealthDataResolver? {
+        return healthDataStore.getDataResolver()
+    }
+    
+    /**
+     * 권한 관리자 반환
+     */
+    fun getPermissionManager(): HealthPermissionManager? {
+        return healthDataStore.getPermissionManager()
+    }
+    
+    /**
+     * 특정 권한 요청
+     */
+    fun requestPermission(activity: Activity, permissionType: PermissionType) {
+        getPermissionManager()?.requestPermission(activity, permissionType)
+    }
+    
+    /**
+     * 권한 확인
+     */
+    fun hasPermission(permissionType: PermissionType): Boolean {
+        return getPermissionManager()?.hasPermission(permissionType) ?: false
+    }
+    
+    /**
+     * 걸음수 데이터 읽기
+     */
+    fun readStepCount(startTime: Long, endTime: Long): List<StepCountData> {
+        return getDataResolver()?.readStepCount(startTime, endTime) ?: emptyList()
+    }
+    
+    /**
+     * 수면 데이터 읽기
+     */
+    fun readSleepData(startTime: Long, endTime: Long): List<SleepData> {
+        return getDataResolver()?.readSleepData(startTime, endTime) ?: emptyList()
+    }
+    
+    /**
+     * 심박수 데이터 읽기
+     */
+    fun readHeartRate(startTime: Long, endTime: Long): List<HeartRateData> {
+        return getDataResolver()?.readHeartRate(startTime, endTime) ?: emptyList()
+    }
+    
+    /**
+     * 체중 데이터 쓰기
+     */
+    fun writeWeight(weight: Float, timestamp: Long) {
+        getDataResolver()?.writeWeight(weight, timestamp)
     }
 }

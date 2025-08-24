@@ -60,52 +60,193 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
     }
   }
   
-  Future<void> _connectHealthStore() async {
-    try {
-      await _channel.invokeMethod('connectHealthStore');
-    } on PlatformException catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('HealthStore 연결 중 오류: ${e.message}'),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-      }
-    }
-  }
-  
-  Future<void> _disconnectHealthStore() async {
-    try {
-      await _channel.invokeMethod('disconnectHealthStore');
-    } on PlatformException catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('HealthStore 연결 해제 중 오류: ${e.message}'),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-      }
-    }
-  }
-  
-  Future<bool> _isHealthStoreConnected() async {
-    try {
-      final result = await _channel.invokeMethod('isHealthStoreConnected');
-      return result as bool;
-    } on PlatformException catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('HealthStore 상태 확인 중 오류: ${e.message}'),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-      }
-      return false;
-    }
-  }
+                Future<void> _connectHealthStore() async {
+                try {
+                  await _channel.invokeMethod('connectHealthStore');
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('HealthStore 연결 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }
+              }
+
+              Future<void> _disconnectHealthStore() async {
+                try {
+                  await _channel.invokeMethod('disconnectHealthStore');
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('HealthStore 연결 해제 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }
+              }
+
+              Future<bool> _isHealthStoreConnected() async {
+                try {
+                  final result = await _channel.invokeMethod('isHealthStoreConnected');
+                  return result as bool;
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('HealthStore 상태 확인 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                  return false;
+                }
+              }
+
+              // 권한 요청 메서드들
+              Future<void> _requestStepCountPermission() async {
+                try {
+                  await _channel.invokeMethod('requestStepCountPermission');
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('걸음수 권한 요청 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }
+              }
+
+              Future<void> _requestSleepPermission() async {
+                try {
+                  await _channel.invokeMethod('requestSleepPermission');
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('수면 권한 요청 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }
+              }
+
+              Future<void> _requestHeartRatePermission() async {
+                try {
+                  await _channel.invokeMethod('requestHeartRatePermission');
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('심박수 권한 요청 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }
+              }
+
+              Future<void> _requestWeightPermission() async {
+                try {
+                  await _channel.invokeMethod('requestWeightPermission');
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('체중 권한 요청 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }
+              }
+
+              // 데이터 읽기 메서드들
+              Future<List<Map<String, dynamic>>> _readStepCount(DateTime startTime, DateTime endTime) async {
+                try {
+                  final result = await _channel.invokeMethod('readStepCount', {
+                    'startTime': startTime.millisecondsSinceEpoch,
+                    'endTime': endTime.millisecondsSinceEpoch,
+                  });
+                  return List<Map<String, dynamic>>.from(result);
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('걸음수 데이터 읽기 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                  return [];
+                }
+              }
+
+              Future<List<Map<String, dynamic>>> _readSleepData(DateTime startTime, DateTime endTime) async {
+                try {
+                  final result = await _channel.invokeMethod('readSleepData', {
+                    'startTime': startTime.millisecondsSinceEpoch,
+                    'endTime': endTime.millisecondsSinceEpoch,
+                  });
+                  return List<Map<String, dynamic>>.from(result);
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('수면 데이터 읽기 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                  return [];
+                }
+              }
+
+              Future<List<Map<String, dynamic>>> _readHeartRate(DateTime startTime, DateTime endTime) async {
+                try {
+                  final result = await _channel.invokeMethod('readHeartRate', {
+                    'startTime': startTime.millisecondsSinceEpoch,
+                    'endTime': endTime.millisecondsSinceEpoch,
+                  });
+                  return List<Map<String, dynamic>>.from(result);
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('심박수 데이터 읽기 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                  return [];
+                }
+              }
+
+              // 데이터 쓰기 메서드들
+              Future<void> _writeWeight(double weight) async {
+                try {
+                  await _channel.invokeMethod('writeWeight', {
+                    'weight': weight,
+                    'timestamp': DateTime.now().millisecondsSinceEpoch,
+                  });
+                } on PlatformException catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('체중 데이터 쓰기 중 오류: ${e.message}'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }
+              }
 
   @override
   Widget build(BuildContext context) {
