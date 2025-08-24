@@ -571,71 +571,81 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   }
 
   Widget _buildWeeklyExerciseCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AllWorkoutsPage(),
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '00:00',
-                style: GoogleFonts.notoSans(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[400],
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '00:00',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[400],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                '운동을 시작해 볼까요?',
-                style: GoogleFonts.notoSans(
-                  fontSize: 14,
-                  color: Colors.grey[600],
+                const SizedBox(height: 4),
+                Text(
+                  '운동을 시작해 볼까요?',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const Spacer(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '이번 주 운동 기록',
-                style: GoogleFonts.notoSans(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+              ],
+            ),
+            const Spacer(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '이번 주 운동 기록',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                width: 16,
-                height: 16,
-                decoration: BoxDecoration(
-                  color: Colors.orange,
-                  shape: BoxShape.circle,
+                const SizedBox(height: 8),
+                Container(
+                  width: 16,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.notifications,
+                    size: 10,
+                    color: Colors.white,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.notifications,
-                  size: 10,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -3250,6 +3260,454 @@ class _SleepCoachingStartPageState extends State<SleepCoachingStartPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class AllWorkoutsPage extends StatefulWidget {
+  const AllWorkoutsPage({super.key});
+
+  @override
+  State<AllWorkoutsPage> createState() => _AllWorkoutsPageState();
+}
+
+class _AllWorkoutsPageState extends State<AllWorkoutsPage> {
+  String selectedDate = '8/24';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          '모든 운동',
+          style: GoogleFonts.notoSans(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.keyboard_arrow_down, color: Colors.black),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.show_chart, color: Colors.black),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.calendar_today, color: Colors.black),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.more_vert, color: Colors.black),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          _buildDateSelector(),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  _buildCurrentWeekSection(),
+                  const SizedBox(height: 16),
+                  _buildWeekSection('8월 17일 ~ 23일', '4:47:26', '1,244 kcal', true),
+                  const SizedBox(height: 16),
+                  _buildWeekSection('8월 10일 ~ 16일', '1:35:21', '684 kcal', true),
+                  const SizedBox(height: 16),
+                  _buildWeekSection('8월 3일 ~ 9일', '1:42:37', '599 kcal', true),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDateSelector() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(color: Colors.grey[200]!, width: 1),
+        ),
+      ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            _buildDateItem('일', '21', false),
+            _buildDateItem('월', '22', false),
+            _buildDateItem('화', '23', false),
+            _buildDateItem('수', '24', true), // selected
+            _buildDateItem('목', '19', false),
+            _buildDateItem('금', '20', false),
+            _buildDateItem('토', '21', false),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDateItem(String day, String date, bool isSelected) {
+    return Container(
+      margin: const EdgeInsets.only(right: 16),
+      child: Column(
+        children: [
+          Text(
+            day,
+            style: GoogleFonts.notoSans(
+              fontSize: 12,
+              color: isSelected ? Colors.blue : Colors.grey[600],
+            ),
+          ),
+          const SizedBox(height: 4),
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: isSelected ? Colors.blue : Colors.transparent,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                date,
+                style: GoogleFonts.notoSans(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: isSelected ? Colors.white : Colors.grey[600],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCurrentWeekSection() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                '이번 주',
+                style: GoogleFonts.notoSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '(8월 24일)',
+                style: GoogleFonts.notoSans(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Text(
+                '00:00',
+                style: GoogleFonts.notoSans(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[400],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '더 이상 기록되는 운동이 없습니다',
+            style: GoogleFonts.notoSans(
+              fontSize: 14,
+              color: Colors.grey[600],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWeekSection(String weekTitle, String totalTime, String totalCalories, bool showTrend) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                weekTitle,
+                style: GoogleFonts.notoSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                totalTime,
+                style: GoogleFonts.notoSans(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                totalCalories,
+                style: GoogleFonts.notoSans(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
+              ),
+              if (showTrend) ...[
+                const SizedBox(width: 4),
+                const Icon(Icons.trending_up, size: 16, color: Colors.green),
+              ],
+            ],
+          ),
+          const SizedBox(height: 16),
+          ..._buildWeekActivities(weekTitle),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildWeekActivities(String weekTitle) {
+    if (weekTitle == '8월 17일 ~ 23일') {
+      return [
+        _buildDaySection('8월 23일 (금)', '1:29:22', '545 kcal', [
+          _buildActivityItem('걷기(자동)', '10:47', '0.48 km', '오후 5:55', Icons.directions_walk),
+          _buildActivityItem('리프팅', '1:18:35', '', '오전 10:11', Icons.fitness_center),
+        ]),
+        _buildDaySection('8월 22일 (목)', '18:02', '115 kcal', [
+          _buildActivityItem('기타 운동(자동)', '18:02', '', '오전 7:45', Icons.sports_gymnastics),
+        ]),
+        _buildDaySection('8월 21일 (수)', '24:17', '167 kcal', [
+          _buildActivityItem('걷기(자동)', '11:10', '0.81 km', '오후 7:14', Icons.directions_walk),
+          _buildActivityItem('걷기(자동)', '13:07', '0.96 km', '오전 9:54', Icons.directions_walk),
+        ]),
+        _buildDaySection('8월 20일 (화)', '47:06', '285 kcal', [
+          _buildActivityItem('걷기(자동)', '12:14', '0.71 km', '오후 10:21', Icons.directions_walk),
+          _buildActivityItem('걷기(자동)', '10:49', '0.73 km', '오후 8:19', Icons.directions_walk),
+          _buildActivityItem('걷기(자동)', '11:59', '0.70 km', '오후 1:02', Icons.directions_walk),
+          _buildActivityItem('걷기(자동)', '11:36', '0.70 km', '오전 11:46', Icons.directions_walk),
+          _buildActivityItem('Arashi Beach Pilates Basics', '00:28', '', '오전 11:31', Icons.sports_gymnastics),
+        ]),
+        _buildDaySection('8월 19일 (월)', '49:23', '253 kcal', [
+          _buildActivityItem('본 수영', '37:43', '425 m', '오전 11:01', Icons.pool),
+          _buildActivityItem('걷기(자동)', '11:40', '0.60 km', '오전 11:58', Icons.directions_walk),
+        ]),
+        _buildDaySection('8월 18일 (일)', '27:39', '123 kcal', [
+          _buildActivityItem('걷기(자동)', '10:55', '0.94 km', '오후 12:49', Icons.directions_walk),
+          _buildActivityItem('걷기(자동)', '16:46', '1.18 km', '오전 11:47', Icons.directions_walk),
+        ]),
+        _buildDaySection('8월 17일 (토)', '31:37', '205 kcal', [
+          _buildActivityItem('걷기(자동)', '17:35', '0.69 km', '오후 2:35', Icons.directions_walk),
+          _buildActivityItem('실외 자전거(자동)', '09:38', '', '오전 8:17', Icons.directions_bike),
+          _buildActivityItem('걷기(자동)', '10:26', '0.58 km', '오전 8:01', Icons.directions_walk),
+        ]),
+      ];
+    } else if (weekTitle == '8월 10일 ~ 16일') {
+      return [
+        _buildDaySection('8월 15일 (금)', '24:06', '263 kcal', [
+          _buildActivityItem('본 수영(자동)', '15:46', '', '오후 5:26', Icons.pool),
+          _buildActivityItem('본 수영(자동)', '08:20', '', '오전 11:59', Icons.pool),
+        ]),
+        _buildDaySection('8월 12일 (화)', '22:06', '129 kcal', [
+          _buildActivityItem('걷기(자동)', '10:16', '0.65 km', '오후 6:20', Icons.directions_walk),
+          _buildActivityItem('걷기(자동)', '11:50', '0.62 km', '오후 12:10', Icons.directions_walk),
+        ]),
+        _buildDaySection('8월 11일 (월)', '24:34', '143 kcal', [
+          _buildActivityItem('걷기(자동)', '20:51', '1.65 km', '오후 12:10', Icons.directions_walk),
+        ]),
+        _buildDaySection('8월 10일 (일)', '24:35', '144 kcal', [
+          _buildActivityItem('걷기(자동)', '12:08', '0.75 km', '오후 6:11', Icons.directions_walk),
+          _buildActivityItem('걷기(자동)', '12:27', '0.74 km', '오후 5:35', Icons.directions_walk),
+        ]),
+      ];
+    } else if (weekTitle == '8월 3일 ~ 9일') {
+      return [
+        _buildDaySection('8월 9일 (토)', '2:06:25', '273 kcal', [
+          _buildActivityItem('걷기(자동)', '11:28', '0.67 km', '오후 5:16', Icons.directions_walk),
+          _buildActivityItem('걷기(자동)', '15:51', '0.77 km', '오후 1:48', Icons.directions_walk),
+          _buildActivityItem('걷기(자동)', '21:26', '1.29 km', '오전 11:49', Icons.directions_walk),
+        ]),
+        _buildDaySection('8월 8일 (금)', '13:32', '74 kcal', [
+          _buildActivityItem('걷기(자동)', '13:32', '0.78 km', '오후 12:37', Icons.directions_walk),
+        ]),
+        _buildDaySection('8월 6일 (수)', '31:49', '150 kcal', [
+          _buildActivityItem('걷기(자동)', '10:40', '0.59 km', '오후 7:38', Icons.directions_walk),
+          _buildActivityItem('걷기(자동)', '21:09', '1.37 km', '오후 12:16', Icons.directions_walk),
+        ]),
+        _buildDaySection('8월 4일 (월)', '10:31', '72 kcal', [
+          _buildActivityItem('걷기(자동)', '10:31', '0.70 km', '오후 6:57', Icons.directions_walk),
+        ]),
+      ];
+    }
+    return [];
+  }
+
+  Widget _buildDaySection(String date, String totalTime, String totalCalories, List<Widget> activities) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                date,
+                style: GoogleFonts.notoSans(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                totalTime,
+                style: GoogleFonts.notoSans(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey[600],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                totalCalories,
+                style: GoogleFonts.notoSans(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          ...activities,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActivityItem(String activityName, String duration, String distance, String time, IconData icon) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.blue[100],
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Icon(icon, color: Colors.blue, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  activityName,
+                  style: GoogleFonts.notoSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                ),
+                if (distance.isNotEmpty) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    distance,
+                    style: GoogleFonts.notoSans(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                duration,
+                style: GoogleFonts.notoSans(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                time,
+                style: GoogleFonts.notoSans(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
