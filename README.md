@@ -192,12 +192,12 @@
 
 ## 🛠 기술 스택
 
-- **Framework**: Flutter 3.9.0+
-- **Language**: Dart
+- **프레임워크**: Flutter 3.9.0+
+- **언어**: Dart
 - **UI**: Material Design 3
-- **Fonts**: Google Fonts (Noto Sans)
-- **Charts**: fl_chart (향후 확장용)
-- **Progress Indicators**: percent_indicator
+- **폰트**: Google Fonts (Noto Sans)
+- **차트**: fl_chart (향후 확장용)
+- **진행률 표시기**: percent_indicator
 
 ## 📦 설치 및 실행
 
@@ -462,20 +462,20 @@ flutter doctor
 
 ## 📱 지원 플랫폼
 
-- ✅ Android (APK 제공)
+- ✅ 안드로이드 (APK 제공)
 - ✅ iOS
-- ✅ Web
-- ✅ Windows (예정)
+- ✅ 웹
+- ✅ 윈도우 (예정)
 - ✅ macOS (예정)
-- ✅ Linux (예정)
+- ✅ 리눅스 (예정)
 
 ## 🤝 기여하기
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. 프로젝트 포크하기
+2. 기능 브랜치 생성하기 (`git checkout -b feature/AmazingFeature`)
+3. 변경사항 커밋하기 (`git commit -m 'Add some AmazingFeature'`)
+4. 브랜치에 푸시하기 (`git push origin feature/AmazingFeature`)
+5. 풀 리퀘스트 열기
 
 ## 📄 라이선스
 
