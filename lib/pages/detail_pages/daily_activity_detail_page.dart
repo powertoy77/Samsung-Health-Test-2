@@ -144,7 +144,7 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
     if (result.isBingoCompleted) {
       _showBingoCompletionDialog();
     } else if (result.isNumberFound) {
-      _navigateToBingoPage();
+      _showBingoBoardButtonDialog();
     } else {
       _showNoBingoDialog();
     }
@@ -180,19 +180,19 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  '축하합니다~!',
+                  'BINGO!~',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 24,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 10),
                 const Text(
-                  '드디어 빙고가 완성되었습니다.',
+                  '축하합니다~!',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: FontWeight.w500,
                   ),
                   textAlign: TextAlign.center,
@@ -203,7 +203,7 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
-                      _bingoService.generateNewBingoBoard();
+                      _bingoService.generateNewBingoBoardAfterBingo();
                       _showFireworksAnimation();
                     },
                     style: ElevatedButton.styleFrom(
@@ -215,7 +215,7 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
                       ),
                     ),
                     child: const Text(
-                      '새로운 빙고 시작하기',
+                      '닫기',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -226,6 +226,54 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+  
+  // 빙고판에 번호가 있을 때 빙고판 보기 버튼 다이얼로그
+  void _showBingoBoardButtonDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            '축하합니다!',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.green,
+            ),
+          ),
+          content: const Text(
+            '빙고판에 당첨된 번호가 있습니다!',
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _navigateToBingoPage();
+              },
+              child: const Text(
+                '빙고판 보기',
+                style: TextStyle(
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('닫기'),
+            ),
+          ],
         );
       },
     );

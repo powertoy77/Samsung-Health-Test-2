@@ -73,6 +73,18 @@ class BingoService {
     _saveBingoData();
   }
   
+  // 빙고 완성 후 새로운 빙고판 생성 (명언 풀도 초기화)
+  void generateNewBingoBoardAfterBingo() {
+    final random = Random();
+    final numbers = List<int>.generate(50, (index) => index + 1);
+    numbers.shuffle(random);
+    _bingoNumbers = numbers.take(25).toList();
+    _bingoSelected = List<bool>.filled(25, false);
+    _selectedQuoteNumbers.clear(); // 명언 풀 초기화
+    _isBingoCompleted = false;
+    _saveBingoData();
+  }
+  
   // 빙고 완성 체크
   bool _checkBingoCompletion() {
     // 가로 체크
