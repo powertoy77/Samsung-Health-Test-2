@@ -382,97 +382,107 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   }
 
   Widget _buildEnergyScoreCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.blue[50],
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const EnergyScoreDetailPage(),
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    '86',
-                    style: GoogleFonts.notoSans(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue[700],
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Row(
-                    children: [
-                      Icon(Icons.trending_up, color: Colors.green, size: 16),
-                      Text(
-                        '.21',
-                        style: GoogleFonts.notoSans(
-                          fontSize: 16,
-                          color: Colors.green,
-                          fontWeight: FontWeight.w500,
-                        ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.blue[50],
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      '86',
+                      style: GoogleFonts.notoSans(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue[700],
                       ),
-                    ],
+                    ),
+                    const SizedBox(width: 4),
+                    Row(
+                      children: [
+                        Icon(Icons.trending_up, color: Colors.green, size: 16),
+                        Text(
+                          '.21',
+                          style: GoogleFonts.notoSans(
+                            fontSize: 16,
+                            color: Colors.green,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '에너지 점수',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 14,
+                    color: Colors.blue[600],
                   ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Text(
-                '에너지 점수',
-                style: GoogleFonts.notoSans(
-                  fontSize: 14,
-                  color: Colors.blue[600],
                 ),
-              ),
-            ],
-          ),
-          const Spacer(),
-          Stack(
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: Colors.blue[200],
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.cloud,
-                  size: 30,
-                  color: Colors.white,
-                ),
-              ),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: Container(
-                  width: 16,
-                  height: 16,
+              ],
+            ),
+            const Spacer(),
+            Stack(
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
-                    color: Colors.orange,
+                    color: Colors.blue[200],
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
-                    Icons.notifications,
-                    size: 10,
+                    Icons.cloud,
+                    size: 30,
                     color: Colors.white,
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    width: 16,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.notifications,
+                      size: 10,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -2446,6 +2456,548 @@ class _WorkoutStartPageState extends State<WorkoutStartPage> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class EnergyScoreDetailPage extends StatefulWidget {
+  const EnergyScoreDetailPage({super.key});
+
+  @override
+  State<EnergyScoreDetailPage> createState() => _EnergyScoreDetailPageState();
+}
+
+class _EnergyScoreDetailPageState extends State<EnergyScoreDetailPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          '에너지 점수',
+          style: GoogleFonts.notoSans(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share, color: Colors.black),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.signal_cellular_alt, color: Colors.black),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.more_vert, color: Colors.black),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildDateSelector(),
+            const SizedBox(height: 24),
+            _buildMainEnergyScore(),
+            const SizedBox(height: 24),
+            _buildVibrantLifeSecret(),
+            const SizedBox(height: 16),
+            _buildFeedbackSection(),
+            const SizedBox(height: 24),
+            _buildEnergyFactors(),
+            const SizedBox(height: 24),
+            _buildSleepDetails(),
+            const SizedBox(height: 24),
+            _buildAchievementSection(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDateSelector() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 8,
+                    itemBuilder: (context, index) {
+                      final dates = ['17', '18', '19', '20', '21', '22', '23', '8/24'];
+                      final isSelected = index == 7;
+                      return Container(
+                        margin: const EdgeInsets.only(right: 8),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: isSelected ? Colors.blue : Colors.grey[300],
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              dates[index],
+                              style: GoogleFonts.notoSans(
+                                fontSize: 12,
+                                color: isSelected ? Colors.blue : Colors.grey[600],
+                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              Text(
+                '100',
+                style: GoogleFonts.notoSans(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMainEnergyScore() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: 200,
+                height: 100,
+                                 child: CircularPercentIndicator(
+                   radius: 100,
+                   lineWidth: 12,
+                   percent: 0.86,
+                   center: const SizedBox(),
+                   progressColor: Colors.blue,
+                   backgroundColor: Colors.grey[200]!,
+                   circularStrokeCap: CircularStrokeCap.round,
+                   startAngle: 180,
+                   arcType: ArcType.HALF,
+                 ),
+              ),
+              Column(
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '86',
+                        style: GoogleFonts.notoSans(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue[700],
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Row(
+                        children: [
+                          Icon(Icons.trending_up, color: Colors.green, size: 16),
+                          Text(
+                            '21',
+                            style: GoogleFonts.notoSans(
+                              fontSize: 16,
+                              color: Colors.green,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Text(
+                    '매우 좋음',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 16,
+                      color: Colors.blue[600],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Icon(Icons.info_outline, color: Colors.grey[400], size: 20),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVibrantLifeSecret() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                '활기찬 생활의 비결',
+                style: GoogleFonts.notoSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              const Spacer(),
+              Icon(Icons.info_outline, color: Colors.grey[400], size: 20),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '수면 심박수가 평소 수준으로 안정적으로 유지되고 있어 건강이 회복되고 있습니다. 에너지 점수도 매우 좋음입니다. 현재 상태를 유지하면서 활동 시간을 꾸준히 관리하세요. 스트레스 수치가 낮아 긍정적입니다. 계속해서 더 나은 건강한 삶을 위해 노력하세요!',
+            style: GoogleFonts.notoSans(
+              fontSize: 14,
+              color: Colors.black87,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeedbackSection() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Text(
+            '이 정보가 유용했나요?',
+            style: GoogleFonts.notoSans(
+              fontSize: 14,
+              color: Colors.black87,
+            ),
+          ),
+          const Spacer(),
+          IconButton(
+            icon: const Icon(Icons.thumb_up_outlined, color: Colors.grey),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.thumb_down_outlined, color: Colors.grey),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEnergyFactors() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '에너지 점수에 영향을 주는 요인',
+            style: GoogleFonts.notoSans(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _buildFactorItem('수면 시간 평균', 0.7, '좋음', Colors.grey!),
+          const SizedBox(height: 12),
+          _buildFactorItem('수면 시간 규칙성', 0.95, '매우 좋음', Colors.blue),
+          const SizedBox(height: 12),
+          _buildFactorItem('수면 패턴 규칙성', 0.95, '매우 좋음', Colors.blue),
+          const SizedBox(height: 12),
+          _buildFactorItem('입면 시간', 0.95, '매우 좋음', Colors.blue),
+          const SizedBox(height: 12),
+          _buildFactorItem('전날 활동', 0.7, '좋음', Colors.grey!),
+          const SizedBox(height: 12),
+          _buildFactorItem('활동 규칙성', 0.7, '좋음', Colors.grey!),
+          const SizedBox(height: 12),
+          _buildFactorItem('수면 심박수', 0.95, '매우 좋음', Colors.blue),
+          const SizedBox(height: 12),
+          _buildFactorItem('수면 심박변이도', 0.95, '매우 좋음', Colors.blue),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFactorItem(String title, double percent, String status, Color color) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              title,
+              style: GoogleFonts.notoSans(
+                fontSize: 14,
+                color: Colors.black87,
+              ),
+            ),
+            const Spacer(),
+            Text(
+              status,
+              style: GoogleFonts.notoSans(
+                fontSize: 14,
+                color: color,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+                 LinearPercentIndicator(
+           width: double.infinity,
+           lineHeight: 6,
+           percent: percent,
+           backgroundColor: Colors.grey[200]!,
+           progressColor: color,
+           barRadius: const Radius.circular(3),
+         ),
+      ],
+    );
+  }
+
+  Widget _buildSleepDetails() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '지난밤 수면에 대해 더 알아보기',
+            style: GoogleFonts.notoSans(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _buildSleepMetric('수면 중 심박수', '평균: 58bpm', '90bpm'),
+          const SizedBox(height: 16),
+          _buildSleepMetric('수면 중 심박변이도', '평균: 47ms', '127ms'),
+          const SizedBox(height: 16),
+          _buildSleepMetric('수면 중 피부 온도', '최근 평균 대비 -0.7에서 +1.1 °C', ''),
+          const SizedBox(height: 16),
+          _buildSleepMetric('수면 중 호흡수', '평균: 9.6회/분', ''),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSleepMetric(String title, String value, String maxValue) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              title,
+              style: GoogleFonts.notoSans(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            const Spacer(),
+            if (maxValue.isNotEmpty)
+              Text(
+                maxValue,
+                style: GoogleFonts.notoSans(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            const SizedBox(width: 8),
+            Icon(Icons.info_outline, color: Colors.grey[400], size: 16),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text(
+          value,
+          style: GoogleFonts.notoSans(
+            fontSize: 12,
+            color: Colors.grey[600],
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          height: 60,
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: Text(
+              '그래프 영역',
+              style: GoogleFonts.notoSans(
+                fontSize: 12,
+                color: Colors.grey[500],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAchievementSection() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Text(
+            '성취도',
+            style: GoogleFonts.notoSans(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: Colors.amber[100],
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.local_fire_department,
+              size: 40,
+              color: Colors.amber,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '에너지 점수 매우 좋음',
+            style: GoogleFonts.notoSans(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
