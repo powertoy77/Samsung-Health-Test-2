@@ -29,11 +29,13 @@ class MainActivity : FlutterActivity() {
             when (call.method) {
 
                 "connectHealthStore" -> {
-                    try {
-                        healthStoreManager.connect(this)
-                        result.success("HealthStore 연결 시도")
-                    } catch (e: Exception) {
-                        result.error("HEALTH_STORE_ERROR", e.message, null)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            healthStoreManager.connect(this@MainActivity)
+                            result.success("HealthStore 연결 시도")
+                        } catch (e: Exception) {
+                            result.error("HEALTH_STORE_ERROR", e.message, null)
+                        }
                     }
                 }
                 "disconnectHealthStore" -> {
@@ -48,105 +50,149 @@ class MainActivity : FlutterActivity() {
                     result.success(healthStoreManager.isConnected())
                 }
                 "requestStepCountPermission" -> {
-                    try {
-                        healthStoreManager.requestPermission(this, PermissionType.STEP_COUNT)
-                        result.success("걸음수 권한 요청 완료")
-                    } catch (e: Exception) {
-                        result.error("HEALTH_STORE_ERROR", e.message, null)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            healthStoreManager.requestPermission(this@MainActivity, PermissionType.STEP_COUNT)
+                            result.success("걸음수 권한 요청 완료")
+                        } catch (e: Exception) {
+                            result.error("HEALTH_STORE_ERROR", e.message, null)
+                        }
                     }
                 }
                 "requestSleepPermission" -> {
-                    try {
-                        healthStoreManager.requestPermission(this, PermissionType.SLEEP)
-                        result.success("수면 권한 요청 완료")
-                    } catch (e: Exception) {
-                        result.error("HEALTH_STORE_ERROR", e.message, null)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            healthStoreManager.requestPermission(this@MainActivity, PermissionType.SLEEP)
+                            result.success("수면 권한 요청 완료")
+                        } catch (e: Exception) {
+                            result.error("HEALTH_STORE_ERROR", e.message, null)
+                        }
                     }
                 }
                 "requestHeartRatePermission" -> {
-                    try {
-                        healthStoreManager.requestPermission(this, PermissionType.HEART_RATE)
-                        result.success("심박수 권한 요청 완료")
-                    } catch (e: Exception) {
-                        result.error("HEALTH_STORE_ERROR", e.message, null)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            healthStoreManager.requestPermission(this@MainActivity, PermissionType.HEART_RATE)
+                            result.success("심박수 권한 요청 완료")
+                        } catch (e: Exception) {
+                            result.error("HEALTH_STORE_ERROR", e.message, null)
+                        }
                     }
                 }
                 "requestWeightPermission" -> {
-                    try {
-                        healthStoreManager.requestPermission(this, PermissionType.WEIGHT)
-                        result.success("체중 권한 요청 완료")
-                    } catch (e: Exception) {
-                        result.error("HEALTH_STORE_ERROR", e.message, null)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            healthStoreManager.requestPermission(this@MainActivity, PermissionType.WEIGHT)
+                            result.success("체중 권한 요청 완료")
+                        } catch (e: Exception) {
+                            result.error("HEALTH_STORE_ERROR", e.message, null)
+                        }
                     }
                 }
                 "hasStepCountPermission" -> {
-                    result.success(healthStoreManager.hasPermission(PermissionType.STEP_COUNT))
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            val hasPermission = healthStoreManager.hasPermission(PermissionType.STEP_COUNT)
+                            result.success(hasPermission)
+                        } catch (e: Exception) {
+                            result.error("HEALTH_STORE_ERROR", e.message, null)
+                        }
+                    }
                 }
                 "hasSleepPermission" -> {
-                    result.success(healthStoreManager.hasPermission(PermissionType.SLEEP))
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            val hasPermission = healthStoreManager.hasPermission(PermissionType.SLEEP)
+                            result.success(hasPermission)
+                        } catch (e: Exception) {
+                            result.error("HEALTH_STORE_ERROR", e.message, null)
+                        }
+                    }
                 }
                 "hasHeartRatePermission" -> {
-                    result.success(healthStoreManager.hasPermission(PermissionType.HEART_RATE))
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            val hasPermission = healthStoreManager.hasPermission(PermissionType.HEART_RATE)
+                            result.success(hasPermission)
+                        } catch (e: Exception) {
+                            result.error("HEALTH_STORE_ERROR", e.message, null)
+                        }
+                    }
                 }
                 "hasWeightPermission" -> {
-                    result.success(healthStoreManager.hasPermission(PermissionType.WEIGHT))
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            val hasPermission = healthStoreManager.hasPermission(PermissionType.WEIGHT)
+                            result.success(hasPermission)
+                        } catch (e: Exception) {
+                            result.error("HEALTH_STORE_ERROR", e.message, null)
+                        }
+                    }
                 }
                 "readStepCount" -> {
-                    try {
-                        val startTime = call.argument<Long>("startTime") ?: 0L
-                        val endTime = call.argument<Long>("endTime") ?: System.currentTimeMillis()
-                        val stepData = healthStoreManager.readStepCount(startTime, endTime)
-                        result.success(stepData.map { 
-                            mapOf(
-                                "startTime" to it.startTime,
-                                "endTime" to it.endTime,
-                                "stepCount" to it.stepCount
-                            )
-                        })
-                    } catch (e: Exception) {
-                        result.error("HEALTH_STORE_ERROR", e.message, null)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            val startTime = call.argument<Long>("startTime") ?: 0L
+                            val endTime = call.argument<Long>("endTime") ?: System.currentTimeMillis()
+                            val stepData = healthStoreManager.readStepCount(startTime, endTime)
+                            result.success(stepData.map { 
+                                mapOf(
+                                    "startTime" to it.startTime,
+                                    "endTime" to it.endTime,
+                                    "stepCount" to it.stepCount
+                                )
+                            })
+                        } catch (e: Exception) {
+                            result.error("HEALTH_STORE_ERROR", e.message, null)
+                        }
                     }
                 }
                 "readSleepData" -> {
-                    try {
-                        val startTime = call.argument<Long>("startTime") ?: 0L
-                        val endTime = call.argument<Long>("endTime") ?: System.currentTimeMillis()
-                        val sleepData = healthStoreManager.readSleepData(startTime, endTime)
-                        result.success(sleepData.map { 
-                            mapOf(
-                                "startTime" to it.startTime,
-                                "endTime" to it.endTime,
-                                "sleepType" to it.sleepType.name,
-                                "duration" to it.duration
-                            )
-                        })
-                    } catch (e: Exception) {
-                        result.error("HEALTH_STORE_ERROR", e.message, null)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            val startTime = call.argument<Long>("startTime") ?: 0L
+                            val endTime = call.argument<Long>("endTime") ?: System.currentTimeMillis()
+                            val sleepData = healthStoreManager.readSleepData(startTime, endTime)
+                            result.success(sleepData.map { 
+                                mapOf(
+                                    "startTime" to it.startTime,
+                                    "endTime" to it.endTime,
+                                    "sleepType" to it.sleepType.name,
+                                    "duration" to it.duration
+                                )
+                            })
+                        } catch (e: Exception) {
+                            result.error("HEALTH_STORE_ERROR", e.message, null)
+                        }
                     }
                 }
                 "readHeartRate" -> {
-                    try {
-                        val startTime = call.argument<Long>("startTime") ?: 0L
-                        val endTime = call.argument<Long>("endTime") ?: System.currentTimeMillis()
-                        val heartRateData = healthStoreManager.readHeartRate(startTime, endTime)
-                        result.success(heartRateData.map { 
-                            mapOf(
-                                "timestamp" to it.timestamp,
-                                "heartRate" to it.heartRate
-                            )
-                        })
-                    } catch (e: Exception) {
-                        result.error("HEALTH_STORE_ERROR", e.message, null)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            val startTime = call.argument<Long>("startTime") ?: 0L
+                            val endTime = call.argument<Long>("endTime") ?: System.currentTimeMillis()
+                            val heartRateData = healthStoreManager.readHeartRate(startTime, endTime)
+                            result.success(heartRateData.map { 
+                                mapOf(
+                                    "timestamp" to it.timestamp,
+                                    "heartRate" to it.heartRate
+                                )
+                            })
+                        } catch (e: Exception) {
+                            result.error("HEALTH_STORE_ERROR", e.message, null)
+                        }
                     }
                 }
                 "writeWeight" -> {
-                    try {
-                        val weight = call.argument<Float>("weight") ?: 0f
-                        val timestamp = call.argument<Long>("timestamp") ?: System.currentTimeMillis()
-                        healthStoreManager.writeWeight(weight, timestamp)
-                        result.success("체중 데이터 쓰기 완료")
-                    } catch (e: Exception) {
-                        result.error("HEALTH_STORE_ERROR", e.message, null)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            val weight = call.argument<Float>("weight") ?: 0f
+                            val timestamp = call.argument<Long>("timestamp") ?: System.currentTimeMillis()
+                            healthStoreManager.writeWeight(weight, timestamp)
+                            result.success("체중 데이터 쓰기 완료")
+                        } catch (e: Exception) {
+                            result.error("HEALTH_STORE_ERROR", e.message, null)
+                        }
                     }
                 }
                 // 새로운 권한 관리 메서드들

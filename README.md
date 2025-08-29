@@ -60,6 +60,7 @@
 - **Local Storage**: shared_preferences
 - **State Management**: StatefulWidget, setState
 - **Navigation**: Navigator, MaterialPageRoute
+- **Samsung Health Data API**: samsung-health-data-api-1.0.0.aar (시뮬레이션 모드)
 
 ## 📦 주요 패키지
 
