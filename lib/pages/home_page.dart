@@ -6,7 +6,6 @@ import 'dart:async';
 import '../services/bingo_service.dart';
 import 'detail_pages/daily_activity_detail_page.dart';
 import 'detail_pages/sleep_detail_page.dart';
-import 'detail_pages/workout_start_page.dart';
 import 'detail_pages/energy_score_detail_page.dart';
 import 'detail_pages/sleep_coaching_start_page.dart';
 import 'detail_pages/all_workouts_page.dart';
@@ -33,10 +32,111 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   // Bingo service
   final BingoService _bingoService = BingoService();
   
+  // 일일 활동 데이터 상태
+  int _currentSteps = 0;
+  int _currentActiveMinutes = 0;
+  int _currentCalories = 0;
+  Timer? _activityTimer;
+  
+  // 목표 값들
+  final int _dailyStepGoal = 6000;
+  final int _dailyActiveMinutesGoal = 30;
+  final int _dailyCaloriesGoal = 200;
+  
   @override
   void initState() {
     super.initState();
     _bingoService.loadBingoData();
+    _initializeActivityData();
+    _startActivityTimer();
+  }
+  
+  @override
+  void dispose() {
+    _activityTimer?.cancel();
+    super.dispose();
+  }
+  
+  // 현재 시간에 따른 활동 데이터 초기화
+  void _initializeActivityData() {
+    final now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day);
+    final minutesSinceStart = now.difference(startOfDay).inMinutes;
+    
+    // 하루 중 시간에 따른 자연스러운 증가
+    final progressRatio = _calculateProgressRatio(now);
+    
+    _currentSteps = (_dailyStepGoal * progressRatio).round();
+    _currentActiveMinutes = (_dailyActiveMinutesGoal * progressRatio).round();
+    _currentCalories = (_dailyCaloriesGoal * progressRatio).round();
+    
+    // 최소값 보장
+    _currentSteps = _currentSteps.clamp(0, _dailyStepGoal);
+    _currentActiveMinutes = _currentActiveMinutes.clamp(0, _dailyActiveMinutesGoal);
+    _currentCalories = _currentCalories.clamp(0, _dailyCaloriesGoal);
+  }
+  
+  // 시간에 따른 진행률 계산 (0.0 ~ 1.0)
+  double _calculateProgressRatio(DateTime now) {
+    final hour = now.hour;
+    final minute = now.minute;
+    final totalMinutes = hour * 60 + minute;
+    
+    // 하루 24시간을 기준으로 진행률 계산
+    // 오전 6시부터 오후 10시까지가 주요 활동 시간
+    if (hour < 6) {
+      // 새벽 시간 (0-6시): 매우 낮은 활동
+      return 0.05;
+    } else if (hour < 9) {
+      // 아침 시간 (6-9시): 점진적 증가
+      return 0.1 + (totalMinutes - 6 * 60) / (3 * 60) * 0.15;
+    } else if (hour < 12) {
+      // 오전 시간 (9-12시): 활발한 활동
+      return 0.25 + (totalMinutes - 9 * 60) / (3 * 60) * 0.25;
+    } else if (hour < 15) {
+      // 점심 시간 (12-15시): 점심 후 활동
+      return 0.5 + (totalMinutes - 12 * 60) / (3 * 60) * 0.2;
+    } else if (hour < 18) {
+      // 오후 시간 (15-18시): 하루 중 가장 활발한 시간
+      return 0.7 + (totalMinutes - 15 * 60) / (3 * 60) * 0.2;
+    } else if (hour < 21) {
+      // 저녁 시간 (18-21시): 저녁 활동
+      return 0.9 + (totalMinutes - 18 * 60) / (3 * 60) * 0.08;
+    } else {
+      // 밤 시간 (21-24시): 활동 감소
+      return 0.98 + (totalMinutes - 21 * 60) / (3 * 60) * 0.02;
+    }
+  }
+  
+  // 활동 타이머 시작
+  void _startActivityTimer() {
+    _activityTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          _updateActivityData();
+        });
+      }
+    });
+  }
+  
+  // 활동 데이터 업데이트
+  void _updateActivityData() {
+    final now = DateTime.now();
+    final progressRatio = _calculateProgressRatio(now);
+    
+    final newSteps = (_dailyStepGoal * progressRatio).round();
+    final newActiveMinutes = (_dailyActiveMinutesGoal * progressRatio).round();
+    final newCalories = (_dailyCaloriesGoal * progressRatio).round();
+    
+    // 자연스러운 증가를 위해 현재 값과 새 값 사이에서 점진적 증가
+    _currentSteps = _lerp(_currentSteps, newSteps, 0.1);
+    _currentActiveMinutes = _lerp(_currentActiveMinutes, newActiveMinutes, 0.1);
+    _currentCalories = _lerp(_currentCalories, newCalories, 0.1);
+  }
+  
+  // 선형 보간 함수
+  int _lerp(int start, int end, double t) {
+    return (start + (end - start) * t).round();
   }
   
   // 랜덤 명언을 가져오는 메서드 (선택되지 않은 명언만)
@@ -266,11 +366,11 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildActivityItem(Icons.directions_walk, '713 걸음', Colors.green),
+                  _buildActivityItem(Icons.directions_walk, '$_currentSteps 걸음', Colors.green),
                   const SizedBox(height: 8),
-                  _buildActivityItem(Icons.access_time, '7분', Colors.blue),
+                  _buildActivityItem(Icons.access_time, '$_currentActiveMinutes분', Colors.blue),
                   const SizedBox(height: 8),
-                  _buildActivityItem(Icons.local_fire_department, '27 kcal', Colors.pink),
+                  _buildActivityItem(Icons.local_fire_department, '$_currentCalories kcal', Colors.pink),
                 ],
               ),
             ),
@@ -801,14 +901,14 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
             Row(
               children: [
                 Text(
-                  '713',
+                  '$_currentSteps',
                   style: GoogleFonts.notoSans(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
-                  '/6,000 걸음',
+                  '/$_dailyStepGoal 걸음',
                   style: GoogleFonts.notoSans(
                     fontSize: 16,
                     color: Colors.grey[600],
@@ -822,7 +922,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    '11%',
+                    '${((_currentSteps / _dailyStepGoal) * 100).round()}%',
                     style: GoogleFonts.notoSans(
                       fontSize: 12,
                       color: Colors.green[700],
@@ -836,7 +936,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
             LinearPercentIndicator(
               width: MediaQuery.of(context).size.width - 64,
               lineHeight: 8,
-              percent: 0.11,
+              percent: _currentSteps / _dailyStepGoal,
               backgroundColor: Colors.grey[300]!,
               progressColor: Colors.green,
               barRadius: const Radius.circular(4),
