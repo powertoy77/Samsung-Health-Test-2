@@ -37,10 +37,18 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
   @override
   void initState() {
     super.initState();
-    // 페이지 로드 후 자동으로 명언 팝업 표시
+    // 페이지 로드 후 걸음 수 조건을 체크하여 명언 팝업 표시
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showMotivationalQuoteDialog();
+      _checkStepsAndShowQuote();
     });
+  }
+  
+  // 걸음 수 조건을 체크하고 명언을 표시하는 메서드
+  Future<void> _checkStepsAndShowQuote() async {
+    final shouldShow = await _bingoService.shouldShowQuoteForSteps(widget.currentSteps);
+    if (shouldShow) {
+      _showMotivationalQuoteDialog();
+    }
   }
   
   // 랜덤 명언을 가져오는 메서드

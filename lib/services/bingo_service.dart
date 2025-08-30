@@ -260,4 +260,34 @@ class BingoService {
       isBingoCompleted: _isBingoCompleted,
     );
   }
+  
+  // 걸음 수 조건을 체크하고 명언 표시 여부를 결정하는 메서드
+  Future<bool> shouldShowQuoteForSteps(int currentSteps) async {
+    final prefs = await SharedPreferences.getInstance();
+    final lastQuoteShownDate = prefs.getString('last_quote_shown_date');
+    final lastQuoteShownSteps = prefs.getInt('last_quote_shown_steps') ?? 0;
+    
+    final today = DateTime.now().toIso8601String().split('T')[0]; // YYYY-MM-DD 형식
+    
+    // 오늘 이미 명언을 보여줬는지 확인
+    if (lastQuoteShownDate == today) {
+      print('📅 BingoService - 오늘 이미 명언을 보여줌 (날짜: $lastQuoteShownDate)');
+      return false;
+    }
+    
+    // 걸음 수가 6000보 이상인지 확인
+    if (currentSteps >= 6000) {
+      print('✅ BingoService - 걸음 수 조건 충족 (현재: $currentSteps, 목표: 6000)');
+      
+      // 오늘 날짜와 걸음 수 저장
+      await prefs.setString('last_quote_shown_date', today);
+      await prefs.setInt('last_quote_shown_steps', currentSteps);
+      
+      print('💾 BingoService - 명언 표시 기록 저장 (날짜: $today, 걸음수: $currentSteps)');
+      return true;
+    } else {
+      print('❌ BingoService - 걸음 수 조건 미충족 (현재: $currentSteps, 목표: 6000)');
+      return false;
+    }
+  }
 }
