@@ -75,11 +75,11 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
     _currentCalories = _currentCalories.clamp(10, _dailyCaloriesGoal);
     
     // 디버그 정보 출력 (개발 중에만 사용)
-    print('🕐 현재 시간: ${now.hour}:${now.minute.toString().padLeft(2, '0')}');
-    print('📊 진행률: ${(progressRatio * 100).toStringAsFixed(1)}%');
-    print('👟 걸음수: $_currentSteps / $_dailyStepGoal');
-    print('⏱️ 활동시간: $_currentActiveMinutes / $_dailyActiveMinutesGoal 분');
-    print('🔥 칼로리: $_currentCalories / $_dailyCaloriesGoal kcal');
+    // print('🕐 현재 시간: ${now.hour}:${now.minute.toString().padLeft(2, '0')}');
+    // print('📊 진행률: ${(progressRatio * 100).toStringAsFixed(1)}%');
+    // print('👟 걸음수: $_currentSteps / $_dailyStepGoal');
+    // print('⏱️ 활동시간: $_currentActiveMinutes / $_dailyActiveMinutesGoal 분');
+    // print('🔥 칼로리: $_currentCalories / $_dailyCaloriesGoal kcal');
   }
   
   // 시간에 따른 진행률 계산 (0.0 ~ 1.0)
@@ -156,10 +156,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
     return (start + (end - start) * t).round();
   }
   
-  // 랜덤 명언을 가져오는 메서드 (선택되지 않은 명언만)
-  Map<String, String> _getRandomQuote() {
-    return _bingoService.getRandomQuote();
-  }
+
   
   // 일일 활동 상세 페이지로 이동
   void _navigateToDailyActivity() {
@@ -377,7 +374,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 4,
               offset: const Offset(0, 2),
@@ -482,7 +479,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 4,
               offset: const Offset(0, 2),
@@ -582,7 +579,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 4,
               offset: const Offset(0, 2),
@@ -609,7 +606,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+                          color: color.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(icon, color: color, size: 24),
@@ -643,7 +640,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 4,
               offset: const Offset(0, 2),
@@ -749,7 +746,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 4,
               offset: const Offset(0, 2),
@@ -832,7 +829,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 4,
               offset: const Offset(0, 2),
@@ -901,7 +898,10 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const StepsDetailPage(),
+            builder: (context) => StepsDetailPage(
+              currentSteps: _currentSteps,
+              dailyStepGoal: _dailyStepGoal,
+            ),
           ),
         );
       },
@@ -912,7 +912,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 4,
               offset: const Offset(0, 2),

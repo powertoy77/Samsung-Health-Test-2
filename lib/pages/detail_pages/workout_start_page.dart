@@ -16,7 +16,6 @@ class WorkoutStartPage extends StatefulWidget {
 class _WorkoutStartPageState extends State<WorkoutStartPage> {
   bool _isWorkoutStarted = false;
   int _elapsedSeconds = 0;
-  late DateTime _startTime;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +62,7 @@ class _WorkoutStartPageState extends State<WorkoutStartPage> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     spreadRadius: 1,
                     blurRadius: 8,
                     offset: const Offset(0, 4),
@@ -123,7 +122,7 @@ class _WorkoutStartPageState extends State<WorkoutStartPage> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     spreadRadius: 1,
                     blurRadius: 8,
                     offset: const Offset(0, 4),
@@ -181,7 +180,7 @@ class _WorkoutStartPageState extends State<WorkoutStartPage> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     spreadRadius: 1,
                     blurRadius: 8,
                     offset: const Offset(0, 4),
@@ -261,7 +260,6 @@ class _WorkoutStartPageState extends State<WorkoutStartPage> {
       } else {
         // 운동 시작
         _isWorkoutStarted = true;
-        _startTime = DateTime.now();
         _startTimer();
       }
     });

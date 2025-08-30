@@ -100,7 +100,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.grey.withValues(alpha: 0.3),
               spreadRadius: 2,
               blurRadius: 10,
               offset: const Offset(0, 4),
@@ -138,7 +138,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                     'Health Hub 서비스와 연동해보세요.',
                     style: GoogleFonts.notoSans(
                       fontSize: 16,
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                     ),
                   ),
                 ],
@@ -172,11 +172,11 @@ class BackgroundIconsPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.1)
+              ..color = Colors.white.withValues(alpha: 0.1)
       ..style = PaintingStyle.fill;
 
     final strokePaint = Paint()
-      ..color = Colors.white.withOpacity(0.2)
+              ..color = Colors.white.withValues(alpha: 0.2)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
@@ -340,7 +340,7 @@ class PeopleSilhouettesPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.15)
+              ..color = Colors.white.withValues(alpha: 0.15)
       ..style = PaintingStyle.fill;
 
     // 왼쪽 노인들 (수염 난 남성과 여성)
@@ -399,11 +399,11 @@ class PeopleSilhouettesPainter extends CustomPainter {
       Rect.fromCenter(center: center, width: 12, height: 18),
       const Radius.circular(1),
     );
-    canvas.drawRRect(screenRect, Paint()..color = Colors.white.withOpacity(0.3));
+          canvas.drawRRect(screenRect, Paint()..color = Colors.white.withValues(alpha: 0.3));
     
     // "HEALTH HUB" 텍스트 (간단한 직사각형으로 표현)
     final textRect = Rect.fromCenter(center: center, width: 10, height: 3);
-    canvas.drawRect(textRect, Paint()..color = Colors.white.withOpacity(0.5));
+          canvas.drawRect(textRect, Paint()..color = Colors.white.withValues(alpha: 0.5));
   }
 
   void _drawDoctor(Canvas canvas, Offset center, Paint paint) {
@@ -416,7 +416,7 @@ class PeopleSilhouettesPainter extends CustomPainter {
     
     // 의사 가운 (넓은 어깨)
     final coatRect = Rect.fromCenter(center: Offset(center.dx, center.dy + 2), width: 14, height: 12);
-    canvas.drawRect(coatRect, Paint()..color = Colors.white.withOpacity(0.1));
+          canvas.drawRect(coatRect, Paint()..color = Colors.white.withValues(alpha: 0.1));
   }
 
   void _drawNurse(Canvas canvas, Offset center, Paint paint) {

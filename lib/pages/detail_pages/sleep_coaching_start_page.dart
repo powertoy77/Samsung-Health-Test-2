@@ -39,7 +39,7 @@ class SleepCoachingStartPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withValues(alpha: 0.1),
                         spreadRadius: 1,
                         blurRadius: 8,
                         offset: const Offset(0, 4),
@@ -147,10 +147,10 @@ class SleepCoachingStartPage extends StatelessWidget {
           width: 80,
           height: 80,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+                              color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: color.withOpacity(0.3),
+                              color: color.withValues(alpha: 0.3),
               width: 2,
             ),
           ),

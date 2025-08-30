@@ -46,7 +46,7 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
   // 걸음 수 조건을 체크하고 명언을 표시하는 메서드
   Future<void> _checkStepsAndShowQuote() async {
     final shouldShow = await _bingoService.shouldShowQuoteForSteps(widget.currentSteps);
-    if (shouldShow) {
+    if (shouldShow && mounted) {
       _showMotivationalQuoteDialog();
     }
   }
@@ -85,7 +85,7 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -341,6 +341,8 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
     // 빙고판이 없으면 자동으로 생성
     await _bingoService.ensureBingoBoardExists();
     
+    if (!mounted) return;
+    
     final bingoData = _bingoService.getBingoData();
     Navigator.pushAndRemoveUntil(
       context,
@@ -489,7 +491,7 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 8,
             offset: const Offset(0, 2),
@@ -642,7 +644,7 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -677,7 +679,7 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
                               margin: const EdgeInsets.symmetric(horizontal: 4),
                               height: height * 80,
                               decoration: BoxDecoration(
-                                color: color.withOpacity(0.3),
+                                color: color.withValues(alpha: 0.3),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                             ),
@@ -737,7 +739,7 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),

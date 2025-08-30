@@ -68,7 +68,7 @@ class _FireworksAnimationState extends State<FireworksAnimation>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black.withOpacity(0.8),
+      backgroundColor: Colors.black.withValues(alpha: 0.8),
       body: AnimatedBuilder(
         animation: _animation,
         builder: (context, child) {

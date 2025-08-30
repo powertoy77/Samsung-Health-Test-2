@@ -274,7 +274,7 @@ class _FitnessPageState extends State<FitnessPage> {
                       child: Icon(
                         _getWorkoutIcon(workout['name']),
                         size: 40,
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
                     ),
                     
@@ -303,7 +303,7 @@ class _FitnessPageState extends State<FitnessPage> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.7),
+                          color: Colors.black.withValues(alpha: 0.7),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
@@ -380,7 +380,7 @@ class _FitnessPageState extends State<FitnessPage> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 4,
               offset: const Offset(0, 2),
@@ -394,7 +394,7 @@ class _FitnessPageState extends State<FitnessPage> {
               width: 50,
               height: 50,
               decoration: BoxDecoration(
-                color: provider['color'].withOpacity(0.1),
+                color: provider['color'].withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(25),
               ),
               child: Icon(

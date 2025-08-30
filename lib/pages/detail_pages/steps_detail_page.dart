@@ -1,31 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 
 class StepsDetailPage extends StatefulWidget {
-  const StepsDetailPage({super.key});
+  final int currentSteps;
+  final int dailyStepGoal;
+
+  const StepsDetailPage({
+    super.key,
+    required this.currentSteps,
+    required this.dailyStepGoal,
+  });
 
   @override
   State<StepsDetailPage> createState() => _StepsDetailPageState();
 }
 
 class _StepsDetailPageState extends State<StepsDetailPage> {
-  // 걸음 수 데이터
-  final int currentSteps = 2073;
-  final int goalSteps = 6000;
-  final double progress = 2073 / 6000;
+  // 걸음 수 데이터 (위젯에서 받은 데이터 사용)
+  late int currentSteps;
+  late int goalSteps;
+  late double progress;
+  
+  @override
+  void initState() {
+    super.initState();
+    currentSteps = widget.currentSteps;
+    goalSteps = widget.dailyStepGoal;
+    progress = currentSteps / goalSteps;
+    _initializeDailySteps();
+  }
   
   // 일별 걸음 수 데이터
-  final List<Map<String, dynamic>> dailySteps = [
-    {'date': '18', 'steps': 8500, 'isCurrent': false},
-    {'date': '19', 'steps': 7200, 'isCurrent': false},
-    {'date': '20', 'steps': 9100, 'isCurrent': false},
-    {'date': '21', 'steps': 6800, 'isCurrent': false},
-    {'date': '22', 'steps': 9500, 'isCurrent': false},
-    {'date': '23', 'steps': 7800, 'isCurrent': false},
-    {'date': '24', 'steps': 2073, 'isCurrent': true},
-  ];
+  late List<Map<String, dynamic>> dailySteps;
+  
+  void _initializeDailySteps() {
+    dailySteps = [
+      {'date': '18', 'steps': 8500, 'isCurrent': false},
+      {'date': '19', 'steps': 7200, 'isCurrent': false},
+      {'date': '20', 'steps': 9100, 'isCurrent': false},
+      {'date': '21', 'steps': 6800, 'isCurrent': false},
+      {'date': '22', 'steps': 9500, 'isCurrent': false},
+      {'date': '23', 'steps': 7800, 'isCurrent': false},
+      {'date': '24', 'steps': currentSteps, 'isCurrent': true},
+    ];
+  }
   
   // 시간별 걸음 수 데이터
   final List<Map<String, dynamic>> hourlySteps = [
@@ -159,7 +178,7 @@ class _StepsDetailPageState extends State<StepsDetailPage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -257,7 +276,7 @@ class _StepsDetailPageState extends State<StepsDetailPage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -382,7 +401,7 @@ class _StepsDetailPageState extends State<StepsDetailPage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -492,7 +511,7 @@ class _StepsDetailPageState extends State<StepsDetailPage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -605,7 +624,7 @@ class _StepsDetailPageState extends State<StepsDetailPage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),

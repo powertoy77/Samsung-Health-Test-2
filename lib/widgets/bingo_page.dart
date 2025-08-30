@@ -24,10 +24,10 @@ class _BingoPageState extends State<BingoPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     
-    print('🎮 BingoPage - 초기화 시작');
-    print('   빙고 번호: ${widget.bingoNumbers}');
-    print('   선택된 상태: ${widget.bingoSelected}');
-    print('   선택된 개수: ${widget.bingoSelected.where((selected) => selected).length}');
+    // print('🎮 BingoPage - 초기화 시작');
+    // print('   빙고 번호: ${widget.bingoNumbers}');
+    // print('   선택된 상태: ${widget.bingoSelected}');
+    // print('   선택된 개수: ${widget.bingoSelected.where((selected) => selected).length}');
     
     _stampAnimationController = AnimationController(
       duration: const Duration(milliseconds: 800),
@@ -63,11 +63,11 @@ class _BingoPageState extends State<BingoPage> with TickerProviderStateMixin {
   }
 
   void _animateSelectedNumbers() async {
-    print('🎬 BingoPage - 선택된 번호들 애니메이션 시작');
+    // print('🎬 BingoPage - 선택된 번호들 애니메이션 시작');
     
     for (int i = 0; i < widget.bingoSelected.length; i++) {
       if (widget.bingoSelected[i]) {
-        print('   번호 ${widget.bingoNumbers[i]} (인덱스: $i) 애니메이션 실행');
+        // print('   번호 ${widget.bingoNumbers[i]} (인덱스: $i) 애니메이션 실행');
         setState(() {
           _animatedIndex = i;
         });
@@ -77,7 +77,7 @@ class _BingoPageState extends State<BingoPage> with TickerProviderStateMixin {
       }
     }
     
-    print('✅ BingoPage - 모든 애니메이션 완료');
+    // print('✅ BingoPage - 모든 애니메이션 완료');
   }
 
   @override
@@ -118,7 +118,7 @@ class _BingoPageState extends State<BingoPage> with TickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.green.withOpacity(0.3),
+                        color: Colors.green.withValues(alpha: 0.3),
                         blurRadius: 10,
                         offset: const Offset(0, 5),
                       ),
@@ -158,7 +158,7 @@ class _BingoPageState extends State<BingoPage> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withValues(alpha: 0.2),
                           blurRadius: 15,
                           offset: const Offset(0, 8),
                         ),
@@ -190,7 +190,7 @@ class _BingoPageState extends State<BingoPage> with TickerProviderStateMixin {
                             ),
                             boxShadow: isSelected ? [
                               BoxShadow(
-                                color: Colors.green.withOpacity(0.3),
+                                color: Colors.green.withValues(alpha: 0.3),
                                 blurRadius: 8,
                                 offset: const Offset(0, 4),
                               ),
