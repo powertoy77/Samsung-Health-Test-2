@@ -39,7 +39,7 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   Timer? _activityTimer;
   
   // 목표 값들
-  final int _dailyStepGoal = 6000;
+  final int _dailyStepGoal = 10000;
   final int _dailyActiveMinutesGoal = 30;
   final int _dailyCaloriesGoal = 200;
   
