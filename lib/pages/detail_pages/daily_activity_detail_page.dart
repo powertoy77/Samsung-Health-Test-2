@@ -5,7 +5,22 @@ import '../../widgets/bingo_page.dart';
 import '../../widgets/fireworks_animation.dart';
 
 class DailyActivityDetailPage extends StatefulWidget {
-  const DailyActivityDetailPage({super.key});
+  final int currentSteps;
+  final int currentActiveMinutes;
+  final int currentCalories;
+  final int dailyStepGoal;
+  final int dailyActiveMinutesGoal;
+  final int dailyCaloriesGoal;
+
+  const DailyActivityDetailPage({
+    super.key,
+    required this.currentSteps,
+    required this.currentActiveMinutes,
+    required this.currentCalories,
+    required this.dailyStepGoal,
+    required this.dailyActiveMinutesGoal,
+    required this.dailyCaloriesGoal,
+  });
 
   @override
   State<DailyActivityDetailPage> createState() => _DailyActivityDetailPageState();
@@ -484,7 +499,7 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
               children: [
                 // Outer ring (steps)
                 CircularProgressIndicator(
-                  value: 967 / 6000,
+                  value: widget.currentSteps / widget.dailyStepGoal,
                   strokeWidth: 8,
                   backgroundColor: Colors.grey[200],
                   valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
@@ -494,7 +509,7 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
                   width: 100,
                   height: 100,
                   child: CircularProgressIndicator(
-                    value: 10 / 90,
+                    value: widget.currentActiveMinutes / widget.dailyActiveMinutesGoal,
                     strokeWidth: 8,
                     backgroundColor: Colors.grey[200],
                     valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
@@ -505,7 +520,7 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
                   width: 80,
                   height: 80,
                   child: CircularProgressIndicator(
-                    value: 38 / 500,
+                    value: widget.currentCalories / widget.dailyCaloriesGoal,
                     strokeWidth: 8,
                     backgroundColor: Colors.grey[200],
                     valueColor: const AlwaysStoppedAnimation<Color>(Colors.pink),
@@ -525,9 +540,9 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildMetric('걸음 수', '967', '/6,000', Colors.green),
-              _buildMetric('활동 시간', '10', '/90분', Colors.blue),
-              _buildMetric('활동 칼로리', '38', '/500kcal', Colors.pink),
+              _buildMetric('걸음 수', '${widget.currentSteps}', '/${widget.dailyStepGoal}', Colors.green),
+              _buildMetric('활동 시간', '${widget.currentActiveMinutes}', '/${widget.dailyActiveMinutesGoal}분', Colors.blue),
+              _buildMetric('활동 칼로리', '${widget.currentCalories}', '/${widget.dailyCaloriesGoal}kcal', Colors.pink),
             ],
           ),
           const SizedBox(height: 20),
@@ -535,8 +550,8 @@ class _DailyActivityDetailPageState extends State<DailyActivityDetailPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildAdditionalMetric('총 칼로리 소모량', '976 kcal'),
-              _buildAdditionalMetric('활동으로 이동한 거리', '0.76 km'),
+              _buildAdditionalMetric('총 칼로리 소모량', '${widget.currentCalories + 200} kcal'),
+              _buildAdditionalMetric('활동으로 이동한 거리', '${(widget.currentSteps * 0.0008).toStringAsFixed(2)} km'),
             ],
           ),
         ],

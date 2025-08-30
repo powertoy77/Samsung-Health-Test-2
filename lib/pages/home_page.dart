@@ -166,7 +166,14 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const DailyActivityDetailPage(),
+        builder: (context) => DailyActivityDetailPage(
+          currentSteps: _currentSteps,
+          currentActiveMinutes: _currentActiveMinutes,
+          currentCalories: _currentCalories,
+          dailyStepGoal: _dailyStepGoal,
+          dailyActiveMinutesGoal: _dailyActiveMinutesGoal,
+          dailyCaloriesGoal: _dailyCaloriesGoal,
+        ),
       ),
     );
   }
