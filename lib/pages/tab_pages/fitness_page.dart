@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../detail_pages/youtube_player_page.dart';
+import '../../data/youtube_workout_data.dart';
 
 class FitnessPage extends StatefulWidget {
   const FitnessPage({super.key});
@@ -10,124 +12,7 @@ class FitnessPage extends StatefulWidget {
 
 class _FitnessPageState extends State<FitnessPage> {
   // 피트니스 섹션 데이터
-  final List<Map<String, dynamic>> fitnessSections = [
-    {
-      'title': 'iFIT Workouts',
-      'workouts': [
-        {'name': 'HIIT Cardio', 'duration': '25 min', 'image': 'hiit_cardio', 'provider': 'iFIT'},
-        {'name': 'Strength Training', 'duration': '30 min', 'image': 'strength', 'provider': 'iFIT'},
-        {'name': 'Yoga Flow', 'duration': '20 min', 'image': 'yoga', 'provider': 'iFIT'},
-        {'name': 'Running', 'duration': '45 min', 'image': 'running', 'provider': 'iFIT'},
-      ],
-    },
-    {
-      'title': 'Aruba Pilates Sculpting Series',
-      'workouts': [
-        {'name': 'Core Sculpting', 'duration': '15 min', 'image': 'pilates_core', 'provider': 'Aruba'},
-        {'name': 'Leg Toning', 'duration': '20 min', 'image': 'pilates_legs', 'provider': 'Aruba'},
-        {'name': 'Full Body', 'duration': '30 min', 'image': 'pilates_full', 'provider': 'Aruba'},
-      ],
-    },
-    {
-      'title': "What's new",
-      'workouts': [
-        {'name': 'Morning Energy', 'duration': '10 min', 'image': 'morning', 'provider': 'FitOn'},
-        {'name': 'Quick Burn', 'duration': '15 min', 'image': 'quick_burn', 'provider': 'Zumba'},
-        {'name': 'Mindful Movement', 'duration': '25 min', 'image': 'mindful', 'provider': 'Pocket Gym'},
-      ],
-    },
-    {
-      'title': 'Popular',
-      'workouts': [
-        {'name': 'Full Body HIIT', 'duration': '35 min', 'image': 'full_hiit', 'provider': 'iFIT'},
-        {'name': 'Core Power', 'duration': '20 min', 'image': 'core_power', 'provider': 'FitOn'},
-        {'name': 'Dance Cardio', 'duration': '30 min', 'image': 'dance', 'provider': 'Zumba'},
-        {'name': 'Strength & Tone', 'duration': '40 min', 'image': 'strength_tone', 'provider': 'Pocket Gym'},
-      ],
-    },
-    {
-      'title': 'Quick Workouts',
-      'workouts': [
-        {'name': '5-Min Core', 'duration': '5 min', 'image': 'quick_core', 'provider': 'FitOn'},
-        {'name': '10-Min Cardio', 'duration': '10 min', 'image': 'quick_cardio', 'provider': 'iFIT'},
-        {'name': '15-Min Yoga', 'duration': '15 min', 'image': 'quick_yoga', 'provider': 'Aruba'},
-      ],
-    },
-    {
-      'title': 'By Provider',
-      'isProviderSection': true,
-      'providers': [
-        {'name': 'iFIT', 'icon': Icons.fitness_center, 'color': Colors.blue},
-        {'name': 'Zumba', 'icon': Icons.music_note, 'color': Colors.orange},
-        {'name': 'FitOn', 'icon': Icons.phone_android, 'color': Colors.purple},
-        {'name': 'Pocket Gym', 'icon': Icons.sports_gymnastics, 'color': Colors.green},
-      ],
-    },
-    {
-      'title': 'Cardio',
-      'workouts': [
-        {'name': 'Running Intervals', 'duration': '45 min', 'image': 'running_intervals', 'provider': 'iFIT'},
-        {'name': 'Cycling', 'duration': '30 min', 'image': 'cycling', 'provider': 'iFIT'},
-        {'name': 'Jump Rope', 'duration': '20 min', 'image': 'jump_rope', 'provider': 'FitOn'},
-      ],
-    },
-    {
-      'title': 'Strength',
-      'workouts': [
-        {'name': 'Upper Body', 'duration': '25 min', 'image': 'upper_body', 'provider': 'Pocket Gym'},
-        {'name': 'Lower Body', 'duration': '30 min', 'image': 'lower_body', 'provider': 'Pocket Gym'},
-        {'name': 'Total Body', 'duration': '40 min', 'image': 'total_body', 'provider': 'iFIT'},
-      ],
-    },
-    {
-      'title': 'Yoga & Stretching',
-      'workouts': [
-        {'name': 'Morning Flow', 'duration': '20 min', 'image': 'morning_yoga', 'provider': 'Aruba'},
-        {'name': 'Evening Stretch', 'duration': '15 min', 'image': 'evening_stretch', 'provider': 'FitOn'},
-        {'name': 'Power Yoga', 'duration': '35 min', 'image': 'power_yoga', 'provider': 'Aruba'},
-      ],
-    },
-    {
-      'title': 'Dance',
-      'workouts': [
-        {'name': 'Latin Dance', 'duration': '30 min', 'image': 'latin_dance', 'provider': 'Zumba'},
-        {'name': 'Hip Hop', 'duration': '25 min', 'image': 'hip_hop', 'provider': 'Zumba'},
-        {'name': 'Ballet Fitness', 'duration': '35 min', 'image': 'ballet', 'provider': 'FitOn'},
-      ],
-    },
-    {
-      'title': 'Mind & Body',
-      'workouts': [
-        {'name': 'Meditation', 'duration': '10 min', 'image': 'meditation', 'provider': 'FitOn'},
-        {'name': 'Breathing', 'duration': '5 min', 'image': 'breathing', 'provider': 'Aruba'},
-        {'name': 'Mindful Movement', 'duration': '20 min', 'image': 'mindful_movement', 'provider': 'FitOn'},
-      ],
-    },
-    {
-      'title': 'Beginner Friendly',
-      'workouts': [
-        {'name': 'First Steps', 'duration': '15 min', 'image': 'first_steps', 'provider': 'iFIT'},
-        {'name': 'Gentle Yoga', 'duration': '20 min', 'image': 'gentle_yoga', 'provider': 'Aruba'},
-        {'name': 'Easy Cardio', 'duration': '25 min', 'image': 'easy_cardio', 'provider': 'FitOn'},
-      ],
-    },
-    {
-      'title': 'Advanced',
-      'workouts': [
-        {'name': 'Extreme HIIT', 'duration': '45 min', 'image': 'extreme_hiit', 'provider': 'iFIT'},
-        {'name': 'Power Lifting', 'duration': '50 min', 'image': 'power_lifting', 'provider': 'Pocket Gym'},
-        {'name': 'Advanced Yoga', 'duration': '60 min', 'image': 'advanced_yoga', 'provider': 'Aruba'},
-      ],
-    },
-    {
-      'title': 'Seasonal',
-      'workouts': [
-        {'name': 'Summer Body', 'duration': '30 min', 'image': 'summer_body', 'provider': 'FitOn'},
-        {'name': 'Winter Warmup', 'duration': '20 min', 'image': 'winter_warmup', 'provider': 'iFIT'},
-        {'name': 'Spring Energy', 'duration': '25 min', 'image': 'spring_energy', 'provider': 'Zumba'},
-      ],
-    },
-  ];
+  final List<Map<String, dynamic>> fitnessSections = YouTubeWorkoutData.fitnessSections;
 
   @override
   Widget build(BuildContext context) {
@@ -257,8 +142,18 @@ class _FitnessPageState extends State<FitnessPage> {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('${workout['name']} 시작')),
+                // 유튜브 플레이어 페이지로 이동
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => YouTubePlayerPage(
+                      videoId: workout['youtubeId'],
+                      title: workout['name'],
+                      duration: workout['duration'],
+                      provider: workout['provider'],
+                      description: workout['description'],
+                    ),
+                  ),
                 );
               },
               child: Container(
@@ -398,7 +293,7 @@ class _FitnessPageState extends State<FitnessPage> {
                 borderRadius: BorderRadius.circular(25),
               ),
               child: Icon(
-                provider['icon'],
+                _getProviderIcon(provider['icon']),
                 color: provider['color'],
                 size: 24,
               ),
@@ -450,6 +345,21 @@ class _FitnessPageState extends State<FitnessPage> {
       return Icons.directions_bike;
     } else {
       return Icons.sports_gymnastics;
+    }
+  }
+
+  IconData _getProviderIcon(String iconName) {
+    switch (iconName) {
+      case 'fitness_center':
+        return Icons.fitness_center;
+      case 'music_note':
+        return Icons.music_note;
+      case 'phone_android':
+        return Icons.phone_android;
+      case 'sports_gymnastics':
+        return Icons.sports_gymnastics;
+      default:
+        return Icons.fitness_center;
     }
   }
 }
