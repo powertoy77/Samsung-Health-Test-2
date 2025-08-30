@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../detail_pages/youtube_player_page.dart';
+import '../detail_pages/workout_section_detail_page.dart';
 import '../../data/youtube_workout_data.dart';
 
 class FitnessPage extends StatefulWidget {
@@ -96,8 +97,16 @@ class _FitnessPageState extends State<FitnessPage> {
               const Spacer(),
               IconButton(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('${section['title']} 더보기')),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WorkoutSectionDetailPage(
+                        sectionTitle: section['title'],
+                        workouts: section['workouts'] ?? [],
+                        isProviderSection: section['isProviderSection'] ?? false,
+                        providers: section['providers'],
+                      ),
+                    ),
                   );
                 },
                 icon: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
