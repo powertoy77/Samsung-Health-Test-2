@@ -93,7 +93,7 @@ class _TogetherPageState extends State<TogetherPage> {
               const SizedBox(height: 24),
               
               // 챌린지 카드들
-              ...challenges.map((challenge) => _buildChallengeCard(challenge)).toList(),
+              ...challenges.map((challenge) => _buildChallengeCard(challenge)),
             ],
           ),
         ),

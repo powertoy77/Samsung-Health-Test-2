@@ -590,7 +590,7 @@ class _StepsDetailPageState extends State<StepsDetailPage> {
                 ],
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

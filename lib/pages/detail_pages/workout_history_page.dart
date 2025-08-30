@@ -277,7 +277,7 @@ class _WorkoutHistoryPageState extends State<WorkoutHistoryPage> {
                 _buildDateNavigation(),
                 
                 // 운동 기록 목록
-                ..._workoutHistory.map((weekData) => _buildWeekSection(weekData)).toList(),
+                ..._workoutHistory.map((weekData) => _buildWeekSection(weekData)),
                 
                 const SizedBox(height: 80), // 스크롤 버튼을 위한 여백
               ],

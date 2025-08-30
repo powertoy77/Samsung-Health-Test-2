@@ -60,20 +60,26 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
   // 현재 시간에 따른 활동 데이터 초기화
   void _initializeActivityData() {
     final now = DateTime.now();
-    final startOfDay = DateTime(now.year, now.month, now.day);
-    final minutesSinceStart = now.difference(startOfDay).inMinutes;
     
-    // 하루 중 시간에 따른 자연스러운 증가
+    // 하루 중 시간에 따른 자연스러운 진행률 계산
     final progressRatio = _calculateProgressRatio(now);
     
+    // 목표 대비 현재 진행률에 따른 활동량 설정
     _currentSteps = (_dailyStepGoal * progressRatio).round();
     _currentActiveMinutes = (_dailyActiveMinutesGoal * progressRatio).round();
     _currentCalories = (_dailyCaloriesGoal * progressRatio).round();
     
-    // 최소값 보장
-    _currentSteps = _currentSteps.clamp(0, _dailyStepGoal);
-    _currentActiveMinutes = _currentActiveMinutes.clamp(0, _dailyActiveMinutesGoal);
-    _currentCalories = _currentCalories.clamp(0, _dailyCaloriesGoal);
+    // 최소값 보장 (새벽 시간에도 최소한의 활동량 표시)
+    _currentSteps = _currentSteps.clamp(200, _dailyStepGoal);
+    _currentActiveMinutes = _currentActiveMinutes.clamp(1, _dailyActiveMinutesGoal);
+    _currentCalories = _currentCalories.clamp(10, _dailyCaloriesGoal);
+    
+    // 디버그 정보 출력 (개발 중에만 사용)
+    print('🕐 현재 시간: ${now.hour}:${now.minute.toString().padLeft(2, '0')}');
+    print('📊 진행률: ${(progressRatio * 100).toStringAsFixed(1)}%');
+    print('👟 걸음수: $_currentSteps / $_dailyStepGoal');
+    print('⏱️ 활동시간: $_currentActiveMinutes / $_dailyActiveMinutesGoal 분');
+    print('🔥 칼로리: $_currentCalories / $_dailyCaloriesGoal kcal');
   }
   
   // 시간에 따른 진행률 계산 (0.0 ~ 1.0)
@@ -82,29 +88,34 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
     final minute = now.minute;
     final totalMinutes = hour * 60 + minute;
     
-    // 하루 24시간을 기준으로 진행률 계산
-    // 오전 6시부터 오후 10시까지가 주요 활동 시간
+    // 실제 사람들의 하루 활동 패턴을 반영한 자연스러운 진행률
+    // 새벽 (0-6시): 수면 시간 - 매우 낮은 활동
     if (hour < 6) {
-      // 새벽 시간 (0-6시): 매우 낮은 활동
-      return 0.05;
-    } else if (hour < 9) {
-      // 아침 시간 (6-9시): 점진적 증가
-      return 0.1 + (totalMinutes - 6 * 60) / (3 * 60) * 0.15;
-    } else if (hour < 12) {
-      // 오전 시간 (9-12시): 활발한 활동
-      return 0.25 + (totalMinutes - 9 * 60) / (3 * 60) * 0.25;
-    } else if (hour < 15) {
-      // 점심 시간 (12-15시): 점심 후 활동
-      return 0.5 + (totalMinutes - 12 * 60) / (3 * 60) * 0.2;
-    } else if (hour < 18) {
-      // 오후 시간 (15-18시): 하루 중 가장 활발한 시간
-      return 0.7 + (totalMinutes - 15 * 60) / (3 * 60) * 0.2;
-    } else if (hour < 21) {
-      // 저녁 시간 (18-21시): 저녁 활동
-      return 0.9 + (totalMinutes - 18 * 60) / (3 * 60) * 0.08;
-    } else {
-      // 밤 시간 (21-24시): 활동 감소
-      return 0.98 + (totalMinutes - 21 * 60) / (3 * 60) * 0.02;
+      return 0.02 + (totalMinutes / (6 * 60)) * 0.03; // 2% → 5%
+    }
+    // 아침 (6-9시): 기상 및 출근 준비 - 점진적 증가
+    else if (hour < 9) {
+      return 0.05 + ((totalMinutes - 6 * 60) / (3 * 60)) * 0.20; // 5% → 25%
+    }
+    // 오전 (9-12시): 업무/활동 시간 - 활발한 활동
+    else if (hour < 12) {
+      return 0.25 + ((totalMinutes - 9 * 60) / (3 * 60)) * 0.25; // 25% → 50%
+    }
+    // 점심 (12-15시): 점심 시간 및 오후 활동 - 지속적 활동
+    else if (hour < 15) {
+      return 0.50 + ((totalMinutes - 12 * 60) / (3 * 60)) * 0.20; // 50% → 70%
+    }
+    // 오후 (15-18시): 하루 중 가장 활발한 시간 - 피크 활동
+    else if (hour < 18) {
+      return 0.70 + ((totalMinutes - 15 * 60) / (3 * 60)) * 0.20; // 70% → 90%
+    }
+    // 저녁 (18-21시): 저녁 활동 및 퇴근 - 활동 감소
+    else if (hour < 21) {
+      return 0.90 + ((totalMinutes - 18 * 60) / (3 * 60)) * 0.08; // 90% → 98%
+    }
+    // 밤 (21-24시): 휴식 및 취침 준비 - 최소 활동
+    else {
+      return 0.98 + ((totalMinutes - 21 * 60) / (3 * 60)) * 0.02; // 98% → 100%
     }
   }
   
@@ -129,9 +140,15 @@ class _SamsungHealthHomePageState extends State<SamsungHealthHomePage> {
     final newCalories = (_dailyCaloriesGoal * progressRatio).round();
     
     // 자연스러운 증가를 위해 현재 값과 새 값 사이에서 점진적 증가
-    _currentSteps = _lerp(_currentSteps, newSteps, 0.1);
-    _currentActiveMinutes = _lerp(_currentActiveMinutes, newActiveMinutes, 0.1);
-    _currentCalories = _lerp(_currentCalories, newCalories, 0.1);
+    // 더 부드러운 전환을 위해 lerp 비율을 낮춤
+    _currentSteps = _lerp(_currentSteps, newSteps, 0.05);
+    _currentActiveMinutes = _lerp(_currentActiveMinutes, newActiveMinutes, 0.05);
+    _currentCalories = _lerp(_currentCalories, newCalories, 0.05);
+    
+    // 최소값 보장
+    _currentSteps = _currentSteps.clamp(200, _dailyStepGoal);
+    _currentActiveMinutes = _currentActiveMinutes.clamp(1, _dailyActiveMinutesGoal);
+    _currentCalories = _currentCalories.clamp(10, _dailyCaloriesGoal);
   }
   
   // 선형 보간 함수
