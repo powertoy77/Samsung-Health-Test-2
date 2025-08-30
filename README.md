@@ -6,6 +6,18 @@
 
 이 프로젝트는 삼성 헬스 앱의 핵심 기능들을 Flutter로 구현한 클론 앱입니다. 실제 삼성 헬스 앱의 디자인과 사용자 경험을 최대한 재현하여, 건강 관리 앱 개발에 대한 이해와 Flutter 개발 역량을 향상시키는 것을 목표로 합니다.
 
+## 📥 다운로드
+
+### 최신 버전
+- **v0.2.4** (2024-12-29): [samsung-health-clone-v0.2.4.apk](samsung-health-clone-v0.2.4.apk)
+  - 명언 표시 조건 개선 (걸음 수 6000보 이상일 때 1번만 발생)
+
+### 이전 버전
+- **v0.2.3**: [samsung-health-clone-v0.2.3.apk](samsung-health-clone-v0.2.3.apk)
+- **v0.2.2**: [samsung-health-clone-v0.2.2.apk](samsung-health-clone-v0.2.2.apk)
+- **v0.2.1**: [samsung-health-clone-v0.2.1.apk](samsung-health-clone-v0.2.1.apk)
+- **v0.1.0**: [samsung-health-clone.apk](samsung-health-clone.apk)
+
 ## ✨ 주요 기능
 
 ### 🏠 홈 화면 (Home Tab)
@@ -239,6 +251,7 @@ lib/
 ## 📝 업데이트 로그
 
 ### 최신 업데이트 (2024년)
+- ✅ **v0.2.4 (2024-12-29)**: 명언 표시 조건 개선 - 걸음 수 6000보 이상일 때 1번만 발생
 - ✅ **동적 활동 데이터 시스템**: 시간 기반 자연스러운 활동 데이터 증가
 - ✅ **운동 명언 빙고 게임**: 50개 명언, 5x5 빙고판, 지속성 있는 게임 시스템
 - ✅ **10,000보 목표**: WHO 권장 일일 활동량 기준으로 업데이트
